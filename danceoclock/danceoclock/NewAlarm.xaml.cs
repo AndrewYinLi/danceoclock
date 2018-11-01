@@ -16,9 +16,21 @@ namespace danceoclock {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window {
-        public Window1() {
+    public partial class NewAlarmWindow : Window {
+        public NewAlarmWindow() {
             InitializeComponent();
+        }
+
+        private void browseMusicButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void browseActionTextBox_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 }

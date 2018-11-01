@@ -15,3 +15,20 @@ C:\Users\andre\Documents\Visual Studio 2017\Projects\danceoclock\danceoclock\obj
 C:\Users\andre\Documents\Visual Studio 2017\Projects\danceoclock\danceoclock\obj\Debug\danceoclock.pdb
 C:\Users\andre\Documents\Visual Studio 2017\Projects\danceoclock\danceoclock\obj\Debug\Window1.g.cs
 C:\Users\andre\Documents\Visual Studio 2017\Projects\danceoclock\danceoclock\obj\Debug\Window1.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\bin\Debug\danceoclock.exe.config
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\bin\Debug\danceoclock.exe
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\bin\Debug\danceoclock.pdb
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csprojAssemblyReference.cache
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\MainWindow.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\NewAlarm.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\App.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock_MarkupCompile.cache
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock_MarkupCompile.lref
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\MainWindow.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\NewAlarm.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.g.resources
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.Properties.Resources.resources
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.GenerateResource.cache
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.CoreCompileInputs.cache
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.exe
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.pdb

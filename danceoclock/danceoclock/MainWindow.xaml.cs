@@ -23,7 +23,8 @@ namespace danceoclock {
         }
 
         private void newAlarmButton_Click(object sender, RoutedEventArgs e) {
-
+            Window newAlarmWindow = new danceoclock.NewAlarmWindow();
+            newAlarmWindow.Show();
         }
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
