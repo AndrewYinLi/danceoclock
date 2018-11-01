@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "danceoclock", "danceoclock\danceoclock.csproj", "{082C881B-23BA-44A9-8D30-3CC357F26AAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{082C881B-23BA-44A9-8D30-3CC357F26AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{082C881B-23BA-44A9-8D30-3CC357F26AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{082C881B-23BA-44A9-8D30-3CC357F26AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{082C881B-23BA-44A9-8D30-3CC357F26AAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97DAC2DB-060B-48D2-8066-B60F5834BA44}
+	EndGlobalSection
+EndGlobal
