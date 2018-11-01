@@ -16,13 +16,25 @@ namespace danceoclock {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
+    /// 
+
     public partial class NewAlarmWindow : Window {
-        public NewAlarmWindow() {
+
+        private MainWindow parent;
+
+        public NewAlarmWindow(MainWindow parent) {
             InitializeComponent();
+            musicPathTextBox.TextWrapping = TextWrapping.NoWrap;
+            this.parent = parent;
+            
         }
 
         private void browseMusicButton_Click(object sender, RoutedEventArgs e) {
-
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            Nullable<bool> result = dlg.ShowDialog();
+            if (result == true) {
+                musicPathTextBox.Text = dlg.FileName;
+            }
         }
 
         private void browseActionTextBox_Click(object sender, RoutedEventArgs e) {
@@ -30,7 +42,7 @@ namespace danceoclock {
         }
 
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
-
+            parent.createNewAlarm(musicPathTextBox.Text, );
         }
     }
 }

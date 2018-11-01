@@ -18,12 +18,21 @@ namespace danceoclock {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+    
+
+        public string help = "";
+
+        public void createNewAlarm(string musicPath) {
+            alarmListBox.Items.Add(musicPath);
+        }
+
         public MainWindow() {
             InitializeComponent();
+            
         }
 
         private void newAlarmButton_Click(object sender, RoutedEventArgs e) {
-            Window newAlarmWindow = new danceoclock.NewAlarmWindow();
+            Window newAlarmWindow = new NewAlarmWindow(this);
             newAlarmWindow.Show();
         }
 
