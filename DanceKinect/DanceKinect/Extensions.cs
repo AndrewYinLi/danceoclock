@@ -169,32 +169,41 @@ namespace DanceKinect
             canvas.DrawLine(body.Joints[JointType.AnkleRight], body.Joints[JointType.FootRight]);
         }
 
+        // display joints as points in skeleton
         public static void DrawPoint(this Canvas canvas, Joint joint)
         {
+            // check if joints are being tracked
             if (joint.TrackingState == TrackingState.NotTracked) return;
 
+            // the joint being drawn
             joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
+            // shape for the point
             Ellipse ellipse = new Ellipse
             {
                 Width = 20,
                 Height = 20,
-                Fill = new SolidColorBrush(Colors.LightBlue)
+                Fill = new SolidColorBrush(Colors.DarkBlue)
             };
 
+            // draw the point
             Canvas.SetLeft(ellipse, joint.Position.X - ellipse.Width / 2);
             Canvas.SetTop(ellipse, joint.Position.Y - ellipse.Height / 2);
 
             canvas.Children.Add(ellipse);
         }
 
+        // display bones as lines in skeleton
         public static void DrawLine(this Canvas canvas, Joint first, Joint second)
         {
+            // check if bones are being tracked
             if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return;
 
+            // 2 joints that the bone connects
             first = first.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
             second = second.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
+            // draw the line
             Line line = new Line
             {
                 X1 = first.Position.X,
@@ -202,7 +211,7 @@ namespace DanceKinect
                 X2 = second.Position.X,
                 Y2 = second.Position.Y,
                 StrokeThickness = 8,
-                Stroke = new SolidColorBrush(Colors.LightBlue)
+                Stroke = new SolidColorBrush(Colors.DarkBlue)
             };
 
             canvas.Children.Add(line);

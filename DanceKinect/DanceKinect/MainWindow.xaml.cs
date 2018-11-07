@@ -63,8 +63,9 @@ namespace DanceKinect
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
-
+        
             // Displaying the camera feed via color frame
+            // comment out this part to only display skeleton for displaying movement instructions
             using (var frame = reference.ColorFrameReference.AcquireFrame())
             {
                 if (frame != null)
