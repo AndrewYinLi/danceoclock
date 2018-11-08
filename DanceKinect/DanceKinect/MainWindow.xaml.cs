@@ -16,15 +16,16 @@ using Microsoft.Kinect;
 
 namespace DanceKinect
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         // set up kinect
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
         IList<Body> _bodies; // list of bodies detected
+
+        // test gesture 
+        
 
         public MainWindow()
         {
@@ -93,10 +94,26 @@ namespace DanceKinect
                             {
                                 canvas.DrawSkeleton(body);
                             }
+
+                            // update gesture
+                            //_gesture.Update(body);
                         }
                     }
                 }
             }
         }
+
+        // output message for recognized gesture
+        static void GestureRecognized(object sender, EventArgs e)
+        {
+            Console.WriteLine("Success!");
+        }
+
+        // output message for failed gesture
+        static void GestureFailed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Gesture failed.");
+        }
+
     }
 }
