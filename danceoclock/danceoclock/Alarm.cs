@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace danceoclock {
-    class Alarm {
+    public class Alarm {
         public string musicPath { get; set; }
         public string date { get; set; }
         public int month { get; set; }
@@ -15,6 +15,7 @@ namespace danceoclock {
         public int minute { get; set; }
         public bool isAM { get; set; }
         public string action { get; set; }
+        public int snoozes { get; set; }
 
         public Alarm(string musicPath, string date, int hour, int minute, bool isAM, string action) {
             this.musicPath = musicPath;
@@ -27,6 +28,7 @@ namespace danceoclock {
             this.minute = minute;
             this.isAM = isAM;
             this.action = action;
+            this.snoozes = 0;
         }
 
         public string placeholderZero(int chron) {

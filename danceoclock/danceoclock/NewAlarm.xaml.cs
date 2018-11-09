@@ -21,11 +21,24 @@ namespace danceoclock {
     public partial class NewAlarmWindow : Window {
 
         private MainWindow parent;
+        private Alarm oldAlarm;
 
-        public NewAlarmWindow(MainWindow parent) {
+        public NewAlarmWindow(MainWindow parent, Alarm oldAlarm) {
             InitializeComponent();
             musicPathTextBox.TextWrapping = TextWrapping.NoWrap;
             this.parent = parent;
+            this.oldAlarm = oldAlarm;
+            if (oldAlarm != null) {
+                musicPathTextBox.Text = oldAlarm.musicPath;
+                alarmDatePicker.SelectedDate = new DateTime(oldAlarm.year, oldAlarm.month, oldAlarm.day);
+                hoursTextBox.Text = oldAlarm.hour+"";
+                minutesTextBox.Text = oldAlarm.minute+"";
+                if (!oldAlarm.isAM) { 
+                    amButton.IsChecked = false;
+                    pmButton.IsChecked = true;
+                }
+                actionTextBox.Text = oldAlarm.action;
+            }
             
         }
 
@@ -47,8 +60,8 @@ namespace danceoclock {
 
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
             parent.createNewAlarm(musicPathTextBox.Text, alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text), (amButton.IsChecked == true) ? true : false, actionTextBox.Text);
+            if(oldAlarm != null) parent.refreshAlarms();
             this.Close();
-
         }
     }
 }
