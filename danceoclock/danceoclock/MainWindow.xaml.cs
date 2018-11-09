@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Timers;
+using System.Media;
+using System.IO;
 
 namespace danceoclock {
     /// <summary>
@@ -27,6 +30,30 @@ namespace danceoclock {
             foreach (Alarm alarm in alarmList) {
                 alarmListBox.Items.Add(alarm.getFiller());
             }
+            
+        }
+
+        /* This function was taken from: https://stackoverflow.com/questions/21299214/how-to-set-timer-to-execute-at-specific-time-in-c-sharp */
+        Timer timer;
+        void setup_Timer() {
+            DateTime currentTime = DateTime.Now;
+            DateTime targetTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 2, 47, 0);
+            if (currentTime > targetTime)
+                targetTime = targetTime.AddDays(1);
+
+            double tickTime = (targetTime - currentTime).TotalMilliseconds;
+            timer = new Timer(tickTime);
+            timer.Elapsed += timer_Elapsed;
+            timer.Start();
+        }
+
+        
+        void timer_Elapsed(object sender, ElapsedEventArgs e) {
+            timer.Stop();
+
+            SoundPlayer player = new SoundPlayer();
+            player.SoundLocation = "C:\\Users\\andre\\Downloads\\sample.wav";
+            player.Play();
         }
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
@@ -37,7 +64,7 @@ namespace danceoclock {
 
         public MainWindow() {
             InitializeComponent();
-            
+            setup_Timer();
         }
 
         private void newAlarmButton_Click(object sender, RoutedEventArgs e) {
