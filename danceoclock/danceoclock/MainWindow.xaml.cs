@@ -23,7 +23,7 @@ namespace danceoclock {
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
             alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action));
-            alarmList.Sort();
+            alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
             alarmListBox.Items.Clear();
             foreach(Alarm alarm in alarmList) {
                 alarmListBox.Items.Add(alarm.getFiller());
