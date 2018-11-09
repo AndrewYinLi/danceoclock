@@ -1,2 +1,2 @@
 # danceoclock
-Dance deactivated alarm clock
+Movement deactivated alarm clock
