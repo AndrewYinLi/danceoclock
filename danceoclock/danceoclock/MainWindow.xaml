@@ -11,7 +11,7 @@
             <RowDefinition Height="199*"/>
             <RowDefinition Height="220*"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="330" Margin="10,35,0,0" VerticalAlignment="Top" Width="772" Grid.RowSpan="2"/>
+        <ListBox x:Name="alarmListBox" HorizontalAlignment="Left" Height="330" Margin="10,35,0,0" VerticalAlignment="Top" Width="772" Grid.RowSpan="2"/>
         <Label x:Name="label" Content="Alarms&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Width="120" Height="26"/>
         <Button x:Name="newAlarmButton" Content="New" HorizontalAlignment="Left" Height="32" Margin="10,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1" Click="newAlarmButton_Click"/>
         <Button x:Name="deleteAlarmButton" Content="Delete" HorizontalAlignment="Left" Height="32" Margin="121,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1" Click="deleteAlarmButton_Click"/>
