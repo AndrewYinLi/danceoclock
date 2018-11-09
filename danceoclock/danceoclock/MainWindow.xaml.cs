@@ -18,12 +18,17 @@ namespace danceoclock {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-    
 
-        public string help = "";
+        List<Alarm> alarmList = new List<Alarm>();
 
-        public void createNewAlarm(string musicPath) {
-            alarmListBox.Items.Add(musicPath);
+        public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
+            alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action));
+            alarmList.Sort();
+            alarmListBox.Items.Clear();
+            foreach(Alarm alarm in alarmList) {
+                alarmListBox.Items.Add(alarm.getFiller());
+            }
+            
         }
 
         public MainWindow() {
@@ -37,7 +42,8 @@ namespace danceoclock {
         }
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
-
+            //System.Diagnostics.Debug.Write(alarmListBox.SelectedIndex);
+            
         }
 
         private void modifyAlarmButton_Click(object sender, RoutedEventArgs e) {
