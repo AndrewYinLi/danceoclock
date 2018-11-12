@@ -20,43 +20,51 @@ namespace DanceKinect
     public partial class MainWindow : Window
     {
         // set up kinect
-        KinectSensor _sensor;
-        MultiSourceFrameReader _reader;
-        IList<Body> _bodies; // list of bodies detected
+        KinectSensor Sensor;
+        MultiSourceFrameReader Reader;
+        public static IList<Body> Bodies; // list of bodies detected
 
-        // test gesture 
-        
+        // tolerance of movement/angle matches in %
+        public static double Tolerance = 0.5;
+
+        // maximum number of frames before timeout for each key frame
+        public static double Timeout = 100;
+
+        // number of repeats for each movement
+        public static double Numrepeats = 1;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Console.WriteLine("asdf");
         }
 
         // when loading window, set up sensor
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _sensor = KinectSensor.GetDefault();
+            Sensor = KinectSensor.GetDefault();
 
-            if (_sensor != null)
+            if (Sensor != null)
             {
-                _sensor.Open();
+                Sensor.Open();
 
-                _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
+                Reader = Sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
+                Reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
         }
 
         // when closing window
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (_reader != null)
+            if (Reader != null)
             {
-                _reader.Dispose();
+                Reader.Dispose();
             }
 
-            if (_sensor != null)
+            if (Sensor != null)
             {
-                _sensor.Close();
+                Sensor.Close();
             }
         }
 
@@ -82,27 +90,121 @@ namespace DanceKinect
                 {
                     canvas.Children.Clear();
 
-                    _bodies = new Body[frame.BodyFrameSource.BodyCount];
+                    Bodies = new Body[frame.BodyFrameSource.BodyCount];
 
-                    frame.GetAndRefreshBodyData(_bodies);
+                    frame.GetAndRefreshBodyData(Bodies);
 
-                    foreach (var body in _bodies)
+                    foreach (var body in Bodies)
                     {
                         if (body != null)
                         {
                             if (body.IsTracked)
                             {
                                 canvas.DrawSkeleton(body);
-                            }
+                                NextFrame(body);
 
-                            // update gesture
-                            //_gesture.Update(body);
+                            }
                         }
                     }
                 }
             }
         }
 
+        // method for calculating the dot product of 2 vectors
+        private static double Dot(double x1, double y1, double x2, double y2)
+        {
+            return x1 * x2 + y1 * y2;
+        }
+
+        // method for calculating angle between two vectors
+        private static double Angle(double x1, double y1, double x2, double y2)
+        {
+            // check for zero vector
+            if ((x1 == 0 && y1 == 0) || (x2 == 0 && y2 == 0))
+            {
+                return 0;
+            }
+            else
+            {
+                double theta = Math.Round((180 / Math.PI) * Math.Acos((double)Dot(x1, y1, x2, y2) /
+                    (double)(Math.Sqrt(Math.Pow(x1, 2) + Math.Pow(y1, 2)) *
+                    (Math.Sqrt(Math.Pow(x2, 2) + Math.Pow(y2, 2))))));
+
+                // check for obtuse angle
+                if (Dot(x1, y1, x2, y2) < 0)
+                {
+                    theta = 360 - theta;
+                }
+
+                return theta;
+            }
+        }
+
+        // method for taking 3 joints and calculating the angle between them
+        private static double JointsAngle(Joint a, Joint b, Joint c)
+        {
+            // first vector b->a
+            double x1 = a.Position.X - b.Position.X;
+            double y1 = a.Position.Y - b.Position.Y;
+
+            // second vector b->c
+            double x2 = c.Position.X - b.Position.X;
+            double y2 = c.Position.Y - b.Position.Y;
+
+            // return angle
+            return Angle(x1, y1, x2, y2);
+        }
+
+        // collect information for the next frame
+        public static List<double> NextFrame(Body body)
+        {
+            List<double> CurrentAngles = new List<double>();
+
+            // calculate and add angles
+
+            Console.WriteLine("neckangle" + JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
+
+            // shoulderleftangle
+            Console.WriteLine("shoulderleftangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
+
+            // shoulderrightangle
+            Console.WriteLine("shoulderrightangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
+
+            // elbowleftangle
+            Console.WriteLine("elbowleftangle" + JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
+
+            // elbowrightangle
+            Console.WriteLine("elbowrightangle" + JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
+
+            // spineangle
+            Console.WriteLine("spineangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
+
+            // hipleftangle
+            Console.WriteLine("hipleftangle" + JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
+
+            // hiprightangle
+            Console.WriteLine("hiprightangle" + JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
+
+            // kneeleftangle 
+            Console.WriteLine("kneeleftangle" + JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
+
+            // kneerightangle
+            Console.WriteLine("kneerightangle" + JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
+            CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
+            
+            return CurrentAngles;
+        }
+
+        /*
         // output message for recognized gesture
         static void GestureRecognized(object sender, EventArgs e)
         {
@@ -113,7 +215,6 @@ namespace DanceKinect
         static void GestureFailed(object sender, EventArgs e)
         {
             Console.WriteLine("Gesture failed.");
-        }
-
+        }*/
     }
 }

@@ -3,32 +3,80 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Kinect;
 
 namespace DanceKinect
 {
     // represents a key frame in a gesture that the user must match
     class KeyFrame
     {
-        // method for calculating the dot product of 2 vectors
-        public static double Dot(double x1, double y1, double x2, double y2)
-        {
-            return x1 * x2 + y1 * y2;
-        }
+        // frame settings - angles to match to
+        readonly List<double> Angles;
 
-        // method for calculating angle between two vectors
-        public static double Angle(double x1, double y1, double x2, double y2)
-        {
-            double theta = Math.Round((180/Math.PI)*Math.Acos((double)Dot(x1, y1, x2, y2) /
-                (double)(Math.Sqrt(Math.Pow(x1, 2) + Math.Pow(y1, 2)) *
-                (Math.Sqrt(Math.Pow(x2, 2) + Math.Pow(y2, 2))))));
+        // body to read movements from
+        Body Body;
 
-            // check for obtuse angle
-            if (Dot(x1, y1, x2, y2) < 0)
+        // number of checking iterations (number of frames)
+        int Iterations;
+
+        // constructor - sets all the frame settings
+        KeyFrame(Body body, List<double> Settings)
+        {
+            this.Body = body;
+
+            foreach (double angle in Settings)
             {
-                theta = 360 - theta;
+                Angles.Add(angle);
             }
 
-            return theta;
+            this.Iterations = 0;
+        }
+
+        // method for checking if the current frame matches the set frame, return whether or not frame was correctly matched
+        public Boolean Check(List<double> Current)
+        {
+            // add iteration number
+            Iterations++;
+
+            // if timeout
+            if (Iterations > MainWindow.Timeout)
+            {
+                // reset frame first
+                Reset();
+                return false;
+            }
+            else
+            {
+                // whether or not all the angles match
+                Boolean AllMatch = true;
+
+                // loop through matching angles in Current and Angles to compare them
+                for (int i = 0; i < Angles.Count; i++)
+                {
+                    // if the angle is not within the tolerated range
+                    if (!(Math.Abs(Current[i] - Angles[i]) <= Angles[i] * MainWindow.Tolerance))
+                    {
+                        AllMatch = false;
+                        break; // don't have to check anymore
+                    }
+                }
+
+                if (AllMatch) {
+                    // if all angles match
+                    Reset();
+                    return true;
+                } else {
+                    // if not all angles match, recurse
+                    return Check(MainWindow.NextFrame(Body));
+                    return false;
+                }
+            }
+        }
+
+        // method for resetting iterations
+        private void Reset()
+        {
+            Iterations = 0;
         }
     }
 }
