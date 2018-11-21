@@ -25,19 +25,65 @@ namespace DanceKinect
         public static IList<Body> Bodies; // list of bodies detected
 
         // tolerance of movement/angle matches in %
-        public static double Tolerance = 0.5;
+        public static double Tolerance;
 
         // maximum number of frames before timeout for each key frame
-        public static double Timeout = 100;
+        public static double Timeout;
 
         // number of repeats for each movement
-        public static double Numrepeats = 1;
+        public static double Numrepeats;
+
+        // dictionary of available gestures - PUT IN MAIN MAIN
+        public static Dictionary<string, Gesture> Gestures;
+
+        // counter for frames
+        public static int CurrentNumFrames = 0;
+
+        // Number of seconds to take new frame
+        public static int Sec = 0;
+
+        // How long gesture should be
+        public static int Length = 0;
+
+        // Frames left to count
+        public static int FramesLeft = 0;
+
+        public static bool Recording = true;
+
+        public static Gesture newGesture = null;
 
         public MainWindow()
         {
             InitializeComponent();
+            Gestures = new Dictionary<string, Gesture>();
 
-            Console.WriteLine("asdf");
+            Tolerance = 0.5;
+            Timeout = 100;
+            Numrepeats = 1;
+
+            if (Recording)
+            {
+                InitRecording();
+            }
+            else
+            {
+                InitAlarmDisplay();
+            }
+            
+
+        }
+
+        public void InitRecording()
+        {
+            CurrentNumFrames = 0;
+            Sec = 1;
+            Length = 2;
+            FramesLeft = 30 * Length;
+        }
+
+        public void InitAlarmDisplay()
+        {
+
         }
 
         // when loading window, set up sensor
@@ -96,13 +142,37 @@ namespace DanceKinect
 
                     foreach (var body in Bodies)
                     {
+                        if(newGesture == null)
+                        {
+                            newGesture = new Gesture(body);
+                        }
                         if (body != null)
                         {
                             if (body.IsTracked)
                             {
                                 canvas.DrawSkeleton(body);
-                                NextFrame(body);
+                                List<double> settings = NextFrame(body);
 
+                                // recording mode
+                                if (Recording)
+                                {
+                                  
+                                    // If 1 second has passed
+                                    if (++CurrentNumFrames == Sec * 30)
+                                    {
+                                        if ((FramesLeft -= CurrentNumFrames) >= 0)
+                                        {
+                                            Gesture.AddKeyframe(new KeyFrame(body, settings));
+                                        }
+                                        else
+                                        {
+                                            // Pass newGesture into Main UI window
+                                            // exit
+                                        }
+                                        CurrentNumFrames = 0;
+                                    }
+
+                                }
                             }
                         }
                     }

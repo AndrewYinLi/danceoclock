@@ -8,7 +8,7 @@ using Microsoft.Kinect;
 namespace DanceKinect
 {
     // represents a key frame in a gesture that the user must match
-    class KeyFrame
+    public class KeyFrame
     {
         // frame settings - angles to match to
         readonly List<double> Angles;
@@ -20,7 +20,7 @@ namespace DanceKinect
         int Iterations;
 
         // constructor - sets all the frame settings
-        KeyFrame(Body body, List<double> Settings)
+        public KeyFrame(Body body, List<double> Settings)
         {
             this.Body = body;
 
@@ -68,7 +68,6 @@ namespace DanceKinect
                 } else {
                     // if not all angles match, recurse
                     return Check(MainWindow.NextFrame(Body));
-                    return false;
                 }
             }
         }

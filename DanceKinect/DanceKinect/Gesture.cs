@@ -7,7 +7,7 @@ using Microsoft.Kinect;
 
 namespace DanceKinect
 {
-    class Gesture
+    public class Gesture
     {
         // list of key frames in the gesture
         public static List<KeyFrame> Keyframes;
