@@ -52,6 +52,9 @@ namespace DanceKinect
 
         public static Gesture newGesture = null;
 
+
+        // include parameters in the constructor for initialization
+        // this class is initialized only when creating an alarm (recording new gesture) or when an alarm is activated
         public MainWindow()
         {
             InitializeComponent();
@@ -61,6 +64,7 @@ namespace DanceKinect
             Timeout = 100;
             Numrepeats = 1;
 
+            // determine actions based on the mode
             if (Recording)
             {
                 InitRecording();
@@ -69,10 +73,10 @@ namespace DanceKinect
             {
                 InitAlarmDisplay();
             }
-            
-
+        
         }
 
+        // initialize the functionality for record a new alarm gesture
         public void InitRecording()
         {
             CurrentNumFrames = 0;
@@ -81,6 +85,7 @@ namespace DanceKinect
             FramesLeft = 30 * Length;
         }
 
+        // initialize the alarm display for alarm deactivation
         public void InitAlarmDisplay()
         {
 
@@ -171,7 +176,6 @@ namespace DanceKinect
                                         }
                                         CurrentNumFrames = 0;
                                     }
-
                                 }
                             }
                         }
@@ -273,18 +277,5 @@ namespace DanceKinect
             
             return CurrentAngles;
         }
-
-        /*
-        // output message for recognized gesture
-        static void GestureRecognized(object sender, EventArgs e)
-        {
-            Console.WriteLine("Success!");
-        }
-
-        // output message for failed gesture
-        static void GestureFailed(object sender, EventArgs e)
-        {
-            Console.WriteLine("Gesture failed.");
-        }*/
     }
 }
