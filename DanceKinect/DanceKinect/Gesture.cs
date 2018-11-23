@@ -21,6 +21,12 @@ namespace DanceKinect
             Body = body;
         }   
 
+        // set the body
+        public void setBody(Body body)
+        {
+            Body = body;
+        }
+
         // add a keyframe
         public static void AddKeyframe(KeyFrame keyframe)
         {
@@ -28,7 +34,7 @@ namespace DanceKinect
         }
 
         // repeat the specified number of times and match the movements, return whether or not the set was successfully completed
-        public static void Repeat()
+        public void Repeat()
         {
             for (int i = 0; i < MainWindow.Numrepeats; i++) {
 

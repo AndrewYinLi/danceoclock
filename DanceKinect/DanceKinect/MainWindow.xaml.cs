@@ -23,6 +23,7 @@ namespace DanceKinect
         KinectSensor Sensor;
         MultiSourceFrameReader Reader;
         public static IList<Body> Bodies; // list of bodies detected
+        public static Gesture newGesture = null;
 
         // tolerance of movement/angle matches in %
         public static double Tolerance;
@@ -33,8 +34,9 @@ namespace DanceKinect
         // number of repeats for each movement
         public static double Numrepeats;
 
-        // dictionary of available gestures - PUT IN MAIN MAIN
-        public static Dictionary<string, Gesture> Gestures;
+        // dictionary of available gestures - Gesture.body should be null initially -
+        // PUT IN UI MAIN, but keep a copy here (load from UI main via constructor)
+        public static Dictionary<string, Gesture> Gestures; // save/load these in txt file
 
         // counter for frames
         public static int CurrentNumFrames = 0;
@@ -48,35 +50,64 @@ namespace DanceKinect
         // Frames left to count
         public static int FramesLeft = 0;
 
+        // mode - either to record new gestures (true) or activate the alarm (false)
         public static bool Recording = true;
 
-        public static Gesture newGesture = null;
+        // for alarm mode - list of names of all gestures used in order
+        List<string> gestNamesList = null;
 
+        // for alarm mode - list of all gestures used in order
+        List<Gesture> gestList = null;
 
-        // include parameters in the constructor for initialization
-        // this class is initialized only when creating an alarm (recording new gesture) or when an alarm is activated
+        // constructor for recording mode
         public MainWindow()
         {
+            loadDict();
             InitializeComponent();
-            Gestures = new Dictionary<string, Gesture>();
 
+            // put these in constructor as params
             Tolerance = 0.5;
             Timeout = 100;
             Numrepeats = 1;
 
-            // determine actions based on the mode
-            if (Recording)
-            {
-                InitRecording();
-            }
-            else
-            {
-                InitAlarmDisplay();
-            }
-        
+            InitRecording();
         }
 
-        // initialize the functionality for record a new alarm gesture
+
+        // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
+        public MainWindow(List<string> gestNamesList)
+        {
+            Recording = false;
+            loadDict();
+
+            this.gestNamesList = gestNamesList; // gesture name list - create gestList after body is determined
+            gestList = new List<Gesture>(); // make new gesture list for the used gestures
+
+            // populate gestList
+            // go through gestNamesList, get values from Gestures, put found Gesture in gestList
+            foreach (string gestName in gestNamesList)
+            {
+                if (Gestures.TryGetValue(gestName, out Gesture gest))
+                {
+                    gestList.Add(gest);
+                }
+            }
+
+            InitializeComponent();
+
+            // put these in constructor as params
+            Tolerance = 0.5;
+            Timeout = 100;
+            Numrepeats = 1;
+        }
+
+        // load dictionary of all gestures from txt - perhaps do this in the UI main
+        public void loadDict()
+        {
+            Gestures = new Dictionary<string, Gesture>(); // dictionary of all gestures - load from txt
+        }
+
+        // initialize the functionality for record a new alarm gesture, put these in constructor?
         public void InitRecording()
         {
             CurrentNumFrames = 0;
@@ -161,7 +192,6 @@ namespace DanceKinect
                                 // recording mode
                                 if (Recording)
                                 {
-                                  
                                     // If 1 second has passed
                                     if (++CurrentNumFrames == Sec * 30)
                                     {
@@ -175,6 +205,15 @@ namespace DanceKinect
                                             // exit
                                         }
                                         CurrentNumFrames = 0;
+                                    }
+
+                                } else // alarm mode
+                                {
+                                    // loop through gestList, match keyframes for number of repetitions
+                                    foreach (Gesture gest in gestList)
+                                    {
+                                        gest.setBody(body); // use the right body instance
+                                        gest.Repeat();
                                     }
                                 }
                             }
