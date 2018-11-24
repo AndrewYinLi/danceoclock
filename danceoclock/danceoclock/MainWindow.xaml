@@ -18,6 +18,7 @@
         <Button x:Name="button_Copy1" Content="Modify" HorizontalAlignment="Left" Height="32" Margin="233,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1"/>
         <Button x:Name="snoozeAlarmButton" Content="Snooze" HorizontalAlignment="Left" Height="32" Margin="345,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1" Click="snoozeAlarmButton_Click"/>
         <Button x:Name="modifyAlarmButton" Content="Modify" HorizontalAlignment="Left" Height="32" Margin="233,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1" Click="modifyAlarmButton_Click"/>
-        <Button x:Name="abortAlarmButton" Content="Abort" HorizontalAlignment="Left" Height="32" Margin="457,177.81,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1" Click="abortAlarmButton_Click"/>
+        <Button x:Name="abortAlarmButton" Content="Abort" HorizontalAlignment="Left" Height="32" Margin="457,178.111,0,0" VerticalAlignment="Top" Width="100" Grid.Row="1" Click="abortAlarmButton_Click"/>
+        <Button x:Name="recordActionButton" Content="Record Action" HorizontalAlignment="Left" Margin="569,178.111,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="32" Click="recordActionButton_Click"/>
     </Grid>
 </Window>

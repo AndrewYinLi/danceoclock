@@ -62,6 +62,15 @@ namespace danceoclock {
             
         }
 
+        public void writeGesture(Gesture gesture, string path)
+        {
+            foreach(KeyFrame frame in gesture.Keyframes)
+            {
+
+            }
+        }
+
+
         public MainWindow() {
             InitializeComponent();
             setup_Timer();
@@ -94,8 +103,17 @@ namespace danceoclock {
         }
 
         private void abortAlarmButton_Click(object sender, RoutedEventArgs e) {
-            alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
-            refreshAlarms();
+            if (alarmListBox.SelectedIndex != -1)
+            {
+                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                refreshAlarms();
+            }
+        }
+
+        private void recordActionButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewAction newAction = new NewAction(this);
+            newAction.Show();
         }
     }
 }

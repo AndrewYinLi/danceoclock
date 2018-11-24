@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
+using System.IO;
 
 namespace DanceKinect
 {
@@ -59,9 +60,14 @@ namespace DanceKinect
         // for alarm mode - list of all gestures used in order
         List<Gesture> gestList = null;
 
+        // ptr to parent (Andrew's UI)
+        MainWindow parent = null;
+
+
         // constructor for recording mode
-        public MainWindow()
+        public MainWindow(MainWindow parent)
         {
+            this.parent = parent;
             loadDict();
             InitializeComponent();
 
@@ -105,6 +111,7 @@ namespace DanceKinect
         public void loadDict()
         {
             Gestures = new Dictionary<string, Gesture>(); // dictionary of all gestures - load from txt
+
         }
 
         // initialize the functionality for record a new alarm gesture, put these in constructor?
@@ -201,8 +208,8 @@ namespace DanceKinect
                                         }
                                         else
                                         {
-                                            // Pass newGesture into Main UI window
-                                            // exit
+                                            // Pass newGesture into ui main window
+                                            // StreamWriter file = new StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"));
                                         }
                                         CurrentNumFrames = 0;
                                     }

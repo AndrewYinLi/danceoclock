@@ -61,7 +61,7 @@ namespace danceoclock {
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
             parent.createNewAlarm(musicPathTextBox.Text, alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text), (amButton.IsChecked == true) ? true : false, actionTextBox.Text);
             if(oldAlarm != null) parent.refreshAlarms();
-            this.Close();
+            Close();
         }
     }
 }
