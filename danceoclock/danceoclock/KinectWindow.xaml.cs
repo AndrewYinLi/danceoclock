@@ -55,6 +55,8 @@ namespace danceoclock
         public static bool Recording = true;
 
 
+        public static Gesture currentGesture = null;
+
         // ptr to parent (Andrew's UI)
         MainWindow parent = null;
         string path = null;
@@ -93,6 +95,7 @@ namespace danceoclock
                 KeyFrame frame = new KeyFrame(anglesList);
                 gesture.Keyframes.Add(frame);
             }
+            currentGesture = gesture;
 
             InitializeComponent();
 
@@ -203,14 +206,11 @@ namespace danceoclock
                                         CurrentNumFrames = 0;
                                     }
 
-                                } else // alarm mode
+                                }
+                                else // alarm mode
                                 {
-                                    // loop through gestList, match keyframes for number of repetitions
-                                    foreach (Gesture gest in gestList)
-                                    {
-                                        gest.setBody(body); // use the right body instance
-                                        gest.Repeat();
-                                    }
+                                    // do something with currentGesture?
+                                    // Also currentGesture's body has not been set and its keyframes body has not been set
                                 }
                             }
                         }
