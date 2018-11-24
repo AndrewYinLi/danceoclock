@@ -14,16 +14,15 @@ namespace danceoclock
         public List<double> Angles;
 
         // body to read movements from
-        Body Body;
+        public Body Body;
 
         // number of checking iterations (number of frames)
-        int Iterations;
+        public int Iterations;
 
-        // constructor - sets all the frame settings
-        public KeyFrame(Body body, List<double> Settings)
+
+        public void setAngles(List<double> Settings)
         {
             Angles = new List<double>();
-            this.Body = body;
 
             foreach (double angle in Settings)
             {
@@ -31,6 +30,20 @@ namespace danceoclock
             }
 
             this.Iterations = 0;
+        }
+
+        // constructor - sets all the frame settings
+        public KeyFrame(List<double> Settings)
+        {
+            setAngles(Settings);
+        }
+
+        // constructor - sets all the frame settings
+        public KeyFrame(Body body, List<double> Settings)
+        {
+            setAngles(Settings);
+            this.Body = body;
+
         }
 
         // method for checking if the current frame matches the set frame, return whether or not frame was correctly matched

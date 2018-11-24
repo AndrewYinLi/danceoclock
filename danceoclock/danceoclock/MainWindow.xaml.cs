@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Timers;
 using System.Media;
 using System.IO;
+using Microsoft.Kinect;
 
 namespace danceoclock {
     /// <summary>
@@ -64,10 +65,21 @@ namespace danceoclock {
 
         public void writeGesture(Gesture gesture, string path)
         {
+            //StreamWriter f = new StreamWriter(path, true); // The overload with a true bool appends to file instead of overwriting
+            StreamWriter f = new StreamWriter(path);
+            // how write body???????
             foreach(KeyFrame frame in gesture.Keyframes)
             {
-
+                StringBuilder sb = new StringBuilder();
+                foreach(double angle in frame.Angles)
+                {
+                    sb.Append(angle);
+                    sb.Append(" ");
+                }
+                sb.Remove(sb.Length-1, 1); // trim space
+                f.WriteLine(sb.ToString());
             }
+            f.Close();
         }
 
 

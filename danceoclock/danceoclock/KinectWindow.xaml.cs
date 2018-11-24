@@ -54,11 +54,6 @@ namespace danceoclock
         // mode - either to record new gestures (true) or activate the alarm (false)
         public static bool Recording = true;
 
-        // for alarm mode - list of names of all gestures used in order
-        List<string> gestNamesList = null;
-
-        // for alarm mode - list of all gestures used in order
-        List<Gesture> gestList = null;
 
         // ptr to parent (Andrew's UI)
         MainWindow parent = null;
@@ -69,7 +64,6 @@ namespace danceoclock
         public KinectWindow(MainWindow parent, string path)
         {
             this.parent = parent;
-            loadDict();
             InitializeComponent();
 
             // put these in constructor as params
@@ -82,22 +76,22 @@ namespace danceoclock
 
 
         // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
-        public KinectWindow(List<string> gestNamesList)
+        public KinectWindow(string gesturePath)
         {
             Recording = false;
-            loadDict();
 
-            this.gestNamesList = gestNamesList; // gesture name list - create gestList after body is determined
-            gestList = new List<Gesture>(); // make new gesture list for the used gestures
-
-            // populate gestList
-            // go through gestNamesList, get values from Gestures, put found Gesture in gestList
-            foreach (string gestName in gestNamesList)
+            Gesture gesture = new Gesture();
+            string[] lines = File.ReadAllLines(gesturePath);
+            foreach(string line in lines)
             {
-                if (Gestures.TryGetValue(gestName, out Gesture gest))
+                string[] anglesArr = line.Split(' ');
+                List<double> anglesList = new List<double>();
+                foreach(string angle in anglesArr)
                 {
-                    gestList.Add(gest);
+                    anglesList.Add(double.Parse(angle));
                 }
+                KeyFrame frame = new KeyFrame(anglesList);
+                gesture.Keyframes.Add(frame);
             }
 
             InitializeComponent();
@@ -106,13 +100,6 @@ namespace danceoclock
             Tolerance = 0.5;
             Timeout = 100;
             Numrepeats = 1;
-        }
-
-        // load dictionary of all gestures from txt - perhaps do this in the UI main
-        public void loadDict()
-        {
-            Gestures = new Dictionary<string, Gesture>(); // dictionary of all gestures - load from txt
-
         }
 
         // initialize the functionality for record a new alarm gesture, put these in constructor?

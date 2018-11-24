@@ -15,6 +15,12 @@ namespace danceoclock
         // body used to match movements
         public Body Body;
 
+
+        public Gesture()
+        {
+            Keyframes = new List<KeyFrame>();
+        }
+
         public Gesture(Body body)
         {
             Keyframes = new List<KeyFrame>();
