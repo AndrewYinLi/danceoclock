@@ -45,7 +45,7 @@ namespace danceoclock
         }
 
         // repeat the specified number of times and match the movements, return whether or not the set was successfully completed
-        public bool SetKeyframe()
+        public bool Match()
         {
             bool correct = true;
 
@@ -54,13 +54,13 @@ namespace danceoclock
                 for (int j = 0; j < Keyframes.Count; j++)
                 {
                     if (!Keyframes[j].Check(KinectWindow.NextFrame(Body))) {
-                        Console.WriteLine(i + " | " + j);
                         correct = false;
                         break;
                     }
                 }
             }
 
+            if (correct) { Console.WriteLine("matched!!"); } else { Console.WriteLine("no"); }
             return correct;
         }
     }

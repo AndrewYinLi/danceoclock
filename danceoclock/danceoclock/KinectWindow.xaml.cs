@@ -43,12 +43,12 @@ namespace danceoclock
         public static int CurrentNumFrames = 0;
 
         // Number of seconds to take new frame
-        public static int Sec = 0;
+        public static double Freq = 0;
 
         // How long gesture should be
         public static int Length = 0;
 
-        // Frames left to count
+        // Frames left to record in the gesture
         public static int FramesLeft = 0;
 
         // mode - either to record new gestures (true) or activate the alarm (false)
@@ -63,15 +63,15 @@ namespace danceoclock
 
 
         // constructor for recording mode
-        public KinectWindow(MainWindow parent, string path, int sec, int length)
+        public KinectWindow(MainWindow parent, string path, double sec, int length)
         {
             this.parent = parent;
             this.path = path;
             InitializeComponent();
 
-            Sec = sec;
+            Freq = sec;
             Length = length;
-            FramesLeft = 30 * Length;
+            FramesLeft = (int) Math.Ceiling(Length / Freq);
         }
 
 
@@ -183,10 +183,12 @@ namespace danceoclock
                                 // recording mode
                                 if (Recording)
                                 {
-                                    // If 1 second has passed
-                                    if (++CurrentNumFrames == Sec * 30)
+                                    
+                                    // how many frames has passed, compare to frequency*fps, we want to record once every freq*fps
+                                    if (++CurrentNumFrames == (int) Math.Ceiling(Freq * 30))
                                     {
-                                        if ((FramesLeft -= CurrentNumFrames) >= 0)
+                                        // record take one frame, so decrement number of frames left to record
+                                        if ((--FramesLeft) >= 0)
                                         {
                                             KeyFrame newFrame = new KeyFrame(body, settings);
 
@@ -235,6 +237,8 @@ namespace danceoclock
                                             parent.writeGesture(newGesture, path);
                                             Close();
                                         }
+
+                                        // recount frames that have passed
                                         CurrentNumFrames = 0;
                                     }
 
@@ -246,7 +250,7 @@ namespace danceoclock
 
                                     //foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
 
-                                    if (currentGesture.SetKeyframe())
+                                    if (currentGesture.Match())
                                     {
                                         canvas.DrawSkeleton(body, Colors.Green);
                                         Close();
