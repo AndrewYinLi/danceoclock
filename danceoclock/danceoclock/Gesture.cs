@@ -31,6 +31,10 @@ namespace danceoclock
         public void setBody(Body body)
         {
             Body = body;
+            foreach(KeyFrame frame in Keyframes)
+            {
+                frame.Body = body;
+            }
         }
 
         // add a keyframe

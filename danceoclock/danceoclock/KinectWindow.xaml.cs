@@ -209,8 +209,8 @@ namespace danceoclock
                                 }
                                 else // alarm mode
                                 {
-                                    // do something with currentGesture?
-                                    // Also currentGesture's body has not been set and its keyframes body has not been set
+                                    currentGesture.setBody(body); // use the right body instance
+                                    currentGesture.Repeat();
                                 }
                             }
                         }
