@@ -213,6 +213,7 @@ namespace danceoclock
                 StrokeThickness = 8,
                 Stroke = new SolidColorBrush(color)
             };
+            canvas.Children.Add(line);
         }
 
         // methods for drawing
@@ -309,6 +310,8 @@ namespace danceoclock
         {
             // check if bones are being tracked
             if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return;
+
+            
 
             // 2 joints that the bone connects
             first = first.ScaleTo(canvas.ActualWidth*0.3, canvas.ActualHeight*0.3);
