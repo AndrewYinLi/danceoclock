@@ -55,6 +55,7 @@ namespace danceoclock
                 {
                     frameIndex = j;
                     if (!Keyframes[j].Check(KinectWindow.NextFrame(Body))) {
+                        Console.WriteLine(i + " | " + j);
                         correct = false;
                         break;
                     }

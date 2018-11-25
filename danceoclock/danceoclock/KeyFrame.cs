@@ -82,7 +82,7 @@ namespace danceoclock
                 for (int i = 0; i < Angles.Count; i++)
                 {
                     // if the angle is not within the tolerated range
-                    if (!(Math.Abs(Current[i] - Angles[i]) <= Angles[i] * KinectWindow.Tolerance))
+                    if (!(Math.Abs(Current[i] - Angles[i]) <= KinectWindow.Tolerance))
                     {
                         AllMatch = false;
                         break; // don't have to check anymore

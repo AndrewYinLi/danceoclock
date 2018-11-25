@@ -222,10 +222,10 @@ namespace danceoclock
                                             newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
                                             newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
 
-                                            foreach (double coord in newFrame.Coords)
+                                            /*foreach (double coord in newFrame.Coords)
                                             {
                                                 Console.WriteLine(coord);
-                                            }
+                                            }*/
 
                                             newGesture.AddKeyframe(newFrame);
                                         }
@@ -242,9 +242,9 @@ namespace danceoclock
                                 else // alarm mode
                                 {
                                     currentGesture.setBody(body); // use the right body instance
-                                    canvas.DrawRefSkeleton(currentGesture.Keyframes[currentGesture.frameIndex].Coords, Colors.DarkBlue);
+                                    canvas.DrawRefSkeleton(currentGesture.Keyframes[currentGesture.frameIndex].Coords, Colors.Purple);
 
-                                    foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
+                                    //foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
 
                                     if (currentGesture.SetKeyframe())
                                     {

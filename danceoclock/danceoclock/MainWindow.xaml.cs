@@ -170,7 +170,7 @@ namespace danceoclock {
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //string gesturePath, double tolerance, double timeout, int numrepeats
-            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", 0.2, 60, 1);
+            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", 30, 60, 1);
             kw.Show();
         }
     }
