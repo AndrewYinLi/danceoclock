@@ -76,6 +76,38 @@ namespace danceoclock {
                     sb.Append(angle);
                     sb.Append(" ");
                 }
+                Body body = frame.Body;
+                sb.Append(body.Joints[JointType.Head].Position.X + " ");
+                sb.Append(body.Joints[JointType.Head].Position.Y + " ");
+                sb.Append(body.Joints[JointType.Neck].Position.X + " ");
+                sb.Append(body.Joints[JointType.Neck].Position.Y + " ");
+                sb.Append(body.Joints[JointType.ShoulderLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.ShoulderLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.ElbowLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.ElbowLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.ShoulderRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.ShoulderRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.ElbowRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.ElbowRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.WristLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.WristLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.WristRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.WristRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.SpineBase].Position.X + " ");
+                sb.Append(body.Joints[JointType.SpineBase].Position.Y + " ");
+                sb.Append(body.Joints[JointType.HipLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.HipLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.HipRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.HipRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.KneeLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.KneeLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.KneeRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.KneeRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.AnkleLeft].Position.X + " ");
+                sb.Append(body.Joints[JointType.AnkleLeft].Position.Y + " ");
+                sb.Append(body.Joints[JointType.AnkleRight].Position.X + " ");
+                sb.Append(body.Joints[JointType.AnkleRight].Position.Y + " ");
+
                 sb.Remove(sb.Length-1, 1); // trim space
                 f.WriteLine(sb.ToString());
             }
@@ -126,6 +158,13 @@ namespace danceoclock {
         {
             NewAction newAction = new NewAction(this);
             newAction.Show();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //string gesturePath, double tolerance, double timeout, int numrepeats
+            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", 0.2, 60, 1);
+            kw.Show();
         }
     }
 }

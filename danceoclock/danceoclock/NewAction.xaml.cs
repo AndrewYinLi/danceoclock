@@ -40,7 +40,11 @@ namespace danceoclock
 
         private void recordButton_Click(object sender, RoutedEventArgs e)
         {
-            KinectWindow kinectWindow = new KinectWindow(parent, dirTextBox.Text + "\\" + fileNameTextBox.Text);
+            KinectWindow kinectWindow = new KinectWindow(parent, dirTextBox.Text + "\\" + fileNameTextBox.Text + ".txt", 1, 2);
+            /*CurrentNumFrames = 0;
+            Sec = 1;
+            Length = 2;
+            */
             kinectWindow.Show();
             Close();
         }

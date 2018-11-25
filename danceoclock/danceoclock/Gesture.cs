@@ -15,6 +15,7 @@ namespace danceoclock
         // body used to match movements
         public Body Body;
 
+        public int frameIndex = 0;
 
         public Gesture()
         {
@@ -27,7 +28,7 @@ namespace danceoclock
             Body = body;
         }   
 
-        // set the body
+        // set the body 
         public void setBody(Body body)
         {
             Body = body;
@@ -44,15 +45,23 @@ namespace danceoclock
         }
 
         // repeat the specified number of times and match the movements, return whether or not the set was successfully completed
-        public void Repeat()
+        public bool SetKeyframe()
         {
+            bool correct = true;
+
             for (int i = 0; i < KinectWindow.Numrepeats; i++) {
 
-                foreach (KeyFrame kf in Keyframes)
+                for (int j = 0; j < Keyframes.Count; j++)
                 {
-                    kf.Check(KinectWindow.NextFrame(Body));
+                    frameIndex = j;
+                    if (!Keyframes[j].Check(KinectWindow.NextFrame(Body))) {
+                        correct = false;
+                        break;
+                    }
                 }
             }
+
+            return correct;
         }
     }
 }

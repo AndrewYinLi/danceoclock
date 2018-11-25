@@ -33,7 +33,7 @@ namespace danceoclock
         public static double Timeout;
 
         // number of repeats for each movement
-        public static double Numrepeats;
+        public static int Numrepeats;
 
         // dictionary of available gestures - Gesture.body should be null initially -
         // PUT IN UI MAIN, but keep a copy here (load from UI main via constructor)
@@ -63,61 +63,53 @@ namespace danceoclock
 
 
         // constructor for recording mode
-        public KinectWindow(MainWindow parent, string path)
+        public KinectWindow(MainWindow parent, string path, int sec, int length)
         {
             this.parent = parent;
+            this.path = path;
             InitializeComponent();
 
-            // put these in constructor as params
-            Tolerance = 0.5;
-            Timeout = 100;
-            Numrepeats = 1;
-
-            InitRecording();
+            Sec = sec;
+            Length = length;
+            FramesLeft = 30 * Length;
         }
 
 
         // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
-        public KinectWindow(string gesturePath)
+        public KinectWindow(string gesturePath, double tolerance, double timeout, int numrepeats)
         {
             Recording = false;
+
+            Tolerance = tolerance;
+            Timeout = timeout;
+            Numrepeats = numrepeats;
+
+            /* put these in constructor as params
+            Tolerance = 0.5;
+            Timeout = 100;
+            Numrepeats = 1; */
 
             Gesture gesture = new Gesture();
             string[] lines = File.ReadAllLines(gesturePath);
             foreach(string line in lines)
             {
-                string[] anglesArr = line.Split(' ');
+                string[] arr = line.Split(' ');
                 List<double> anglesList = new List<double>();
-                foreach(string angle in anglesArr)
+                List<double> coordsList = new List<double>();
+
+                int i = 0;
+                foreach(string angle in arr)
                 {
-                    anglesList.Add(double.Parse(angle));
+                    if (i < 10) { anglesList.Add(double.Parse(angle)); }
+                    else { coordsList.Add(double.Parse(angle)); }
+                    i++;                    
                 }
-                KeyFrame frame = new KeyFrame(anglesList);
+                KeyFrame frame = new KeyFrame(anglesList, coordsList);
                 gesture.Keyframes.Add(frame);
             }
             currentGesture = gesture;
 
             InitializeComponent();
-
-            // put these in constructor as params
-            Tolerance = 0.5;
-            Timeout = 100;
-            Numrepeats = 1;
-        }
-
-        // initialize the functionality for record a new alarm gesture, put these in constructor?
-        public void InitRecording()
-        {
-            CurrentNumFrames = 0;
-            Sec = 1;
-            Length = 2;
-            FramesLeft = 30 * Length;
-        }
-
-        // initialize the alarm display for alarm deactivation
-        public void InitAlarmDisplay()
-        {
-
         }
 
         // when loading window, set up sensor
@@ -184,7 +176,8 @@ namespace danceoclock
                         {
                             if (body.IsTracked)
                             {
-                                canvas.DrawSkeleton(body);
+                                canvas.DrawSkeleton(body, Colors.DarkBlue);
+
                                 List<double> settings = NextFrame(body);
 
                                 // recording mode
@@ -195,7 +188,7 @@ namespace danceoclock
                                     {
                                         if ((FramesLeft -= CurrentNumFrames) >= 0)
                                         {
-                                            newGesture.AddKeyframe(new KeyFrame(body, settings));
+                                            newGesture.AddKeyframe(new KeyFrame(canvas, body, settings));
                                         }
                                         else
                                         {
@@ -210,7 +203,18 @@ namespace danceoclock
                                 else // alarm mode
                                 {
                                     currentGesture.setBody(body); // use the right body instance
-                                    currentGesture.Repeat();
+                                    canvas.DrawRefSkeleton(currentGesture.Keyframes[currentGesture.frameIndex].Coords, Colors.DarkBlue);
+
+                                    //foreach (double coords in )
+
+                                    if (currentGesture.SetKeyframe())
+                                    {
+                                        canvas.DrawSkeleton(body, Colors.Green);
+                                        Close();
+                                    } else
+                                    {
+                                        canvas.DrawSkeleton(body, Colors.Red);
+                                    }
                                 }
                             }
                         }
@@ -271,45 +275,59 @@ namespace danceoclock
 
             // calculate and add angles
 
-            Console.WriteLine("neckangle" + JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
+            //Console.WriteLine("neckangle" + JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
 
             // shoulderleftangle
-            Console.WriteLine("shoulderleftangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
+            //Console.WriteLine("shoulderleftangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
 
             // shoulderrightangle
-            Console.WriteLine("shoulderrightangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
+            //Console.WriteLine("shoulderrightangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
 
             // elbowleftangle
-            Console.WriteLine("elbowleftangle" + JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
+            //Console.WriteLine("elbowleftangle" + JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
 
             // elbowrightangle
-            Console.WriteLine("elbowrightangle" + JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
+           // Console.WriteLine("elbowrightangle" + JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
 
             // spineangle
-            Console.WriteLine("spineangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
+            //Console.WriteLine("spineangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
 
             // hipleftangle
-            Console.WriteLine("hipleftangle" + JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
+            //Console.WriteLine("hipleftangle" + JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
 
             // hiprightangle
-            Console.WriteLine("hiprightangle" + JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
+            //Console.WriteLine("hiprightangle" + JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
 
             // kneeleftangle 
-            Console.WriteLine("kneeleftangle" + JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
+            //Console.WriteLine("kneeleftangle" + JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
 
             // kneerightangle
-            Console.WriteLine("kneerightangle" + JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
+            //Console.WriteLine("kneerightangle" + JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
-            
+
+
+            /*
+            StreamWriter f = new StreamWriter("C:\\Users\\shanali\\Desktop\\penisattempt.txt", true);
+            StringBuilder sb = new StringBuilder();
+            foreach (double angle in CurrentAngles)
+            {
+                sb.Append(angle);
+                sb.Append(" ");
+            }
+            sb.Remove(sb.Length - 1, 1); // trim space
+            f.WriteLine(sb.ToString());
+            f.Close();
+            */
+
             return CurrentAngles;
         }
     }
