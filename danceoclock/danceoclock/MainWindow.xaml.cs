@@ -76,7 +76,14 @@ namespace danceoclock {
                     sb.Append(angle);
                     sb.Append(" ");
                 }
-                Body body = frame.Body;
+
+                foreach (double coords in frame.Coords)
+                {
+                    sb.Append(coords + " ");
+                }
+                
+
+                /*Body body = frame.Body;
                 sb.Append(body.Joints[JointType.Head].Position.X + " ");
                 sb.Append(body.Joints[JointType.Head].Position.Y + " ");
                 sb.Append(body.Joints[JointType.Neck].Position.X + " ");
@@ -106,7 +113,7 @@ namespace danceoclock {
                 sb.Append(body.Joints[JointType.AnkleLeft].Position.X + " ");
                 sb.Append(body.Joints[JointType.AnkleLeft].Position.Y + " ");
                 sb.Append(body.Joints[JointType.AnkleRight].Position.X + " ");
-                sb.Append(body.Joints[JointType.AnkleRight].Position.Y + " ");
+                sb.Append(body.Joints[JointType.AnkleRight].Position.Y + " ");*/
 
                 sb.Remove(sb.Length-1, 1); // trim space
                 f.WriteLine(sb.ToString());

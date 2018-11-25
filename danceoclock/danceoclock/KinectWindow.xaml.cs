@@ -188,7 +188,46 @@ namespace danceoclock
                                     {
                                         if ((FramesLeft -= CurrentNumFrames) >= 0)
                                         {
-                                            newGesture.AddKeyframe(new KeyFrame(canvas, body, settings));
+                                            KeyFrame newFrame = new KeyFrame(body, settings);
+
+                                            newFrame.Coords = new List<double>();
+                                            newFrame.Coords.Add(body.Joints[JointType.Head].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.Head].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.Neck].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.Neck].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.ShoulderLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.ShoulderLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.ElbowLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.ElbowLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.ShoulderRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.ShoulderRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.ElbowRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.ElbowRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.WristLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.WristLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.WristRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.WristRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.SpineBase].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.SpineBase].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.HipLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.HipLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.HipRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.HipRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.KneeLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.KneeLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.KneeRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.KneeRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.AnkleLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.AnkleLeft].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+                                            newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
+                                            newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
+
+                                            foreach (double coord in newFrame.Coords)
+                                            {
+                                                Console.WriteLine(coord);
+                                            }
+
+                                            newGesture.AddKeyframe(newFrame);
                                         }
                                         else
                                         {
@@ -205,7 +244,7 @@ namespace danceoclock
                                     currentGesture.setBody(body); // use the right body instance
                                     canvas.DrawRefSkeleton(currentGesture.Keyframes[currentGesture.frameIndex].Coords, Colors.DarkBlue);
 
-                                    //foreach (double coords in )
+                                    foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
 
                                     if (currentGesture.SetKeyframe())
                                     {
