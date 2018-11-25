@@ -53,7 +53,6 @@ namespace danceoclock
 
                 for (int j = 0; j < Keyframes.Count; j++)
                 {
-                    frameIndex = j;
                     if (!Keyframes[j].Check(KinectWindow.NextFrame(Body))) {
                         Console.WriteLine(i + " | " + j);
                         correct = false;
