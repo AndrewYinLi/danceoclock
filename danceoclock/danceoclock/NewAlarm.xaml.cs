@@ -63,5 +63,21 @@ namespace danceoclock {
             if(oldAlarm != null) parent.refreshAlarms();
             Close();
         }
+
+        private void hoursTextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (hoursTextBox.Text.Equals("h"))
+            {
+                hoursTextBox.Text = "";
+            }
+        }
+
+        private void minutesTextBox_MousEnter(object sender, MouseEventArgs e)
+        {
+            if (minutesTextBox.Text.Equals("m"))
+            {
+                minutesTextBox.Text = "";
+            }
+        }
     }
 }

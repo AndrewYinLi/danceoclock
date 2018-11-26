@@ -14,8 +14,8 @@
         <RadioButton x:Name="pmButton" Content="PM" HorizontalAlignment="Left" Margin="163,82,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.531,3.988"/>
         <Label x:Name="label1" Content="Time:" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.147,0.558"/>
         <DatePicker x:Name="alarmDatePicker" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="337"/>
-        <TextBox x:Name="hoursTextBox" HorizontalAlignment="Left" Height="20" Margin="48,79,0,0" TextWrapping="Wrap" Text="h" VerticalAlignment="Top" Width="27"/>
-        <TextBox x:Name="minutesTextBox" HorizontalAlignment="Left" Height="20" Margin="88,79,0,0" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" Width="27"/>
+        <TextBox x:Name="hoursTextBox" HorizontalAlignment="Left" Height="20" Margin="48,79,0,0" TextWrapping="Wrap" Text="h" VerticalAlignment="Top" Width="27" MouseEnter="hoursTextBox_MouseEnter"/>
+        <TextBox x:Name="minutesTextBox" HorizontalAlignment="Left" Height="20" Margin="88,79,0,0" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" Width="27" MouseEnter="minutesTextBox_MousEnter"/>
         <Label x:Name="label2" Content=":" HorizontalAlignment="Left" Margin="75,73,0,0" VerticalAlignment="Top"/>
         <Button x:Name="createAlarmButton" Content="Create" HorizontalAlignment="Left" Margin="10,142,0,0" VerticalAlignment="Top" Width="337" Click="createAlarmButton_Click"/>
         <TextBox x:Name="actionTextBox" HorizontalAlignment="Left" Height="22" Margin="54,109,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="200" AutomationProperties.Name="b"/>

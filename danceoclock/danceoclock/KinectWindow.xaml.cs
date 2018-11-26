@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.IO;
+using System.Windows.Threading;
 
 namespace danceoclock
 {
@@ -85,11 +78,6 @@ namespace danceoclock
             Timeout = timeout;
             Numrepeats = numrepeats;
 
-            /* put these in constructor as params
-            Tolerance = 0.5;
-            Timeout = 100;
-            Numrepeats = 1; */
-
             Gesture gesture = new Gesture();
             string[] lines = File.ReadAllLines(gesturePath);
             foreach(string line in lines)
@@ -141,6 +129,15 @@ namespace danceoclock
             }
         }
 
+        /*.
+        private static Action EmptyDelegate = delegate () { };
+
+        public static void Refresh(UIElement uiElement)
+        {
+            uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+        }
+        */
+
         // method for reading information from the sensor
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -162,7 +159,7 @@ namespace danceoclock
                 if (frame != null)
                 {
                     canvas.Children.Clear();
-
+                    
                     Bodies = new Body[frame.BodyFrameSource.BodyCount];
 
                     frame.GetAndRefreshBodyData(Bodies);
@@ -178,7 +175,13 @@ namespace danceoclock
                             if (body.IsTracked)
                             {
                                 canvas.DrawSkeleton(body, Colors.DarkBlue);
-
+                                /*
+                                if (frameMessageLabel.Visibility != Visibility.Hidden)
+                                {
+                                    frameMessageLabel.Visibility = Visibility.Hidden;
+                                    Refresh(frameMessageLabel);
+                                }
+                                */
                                 List<double> settings = NextFrame(body);
 
                                 // recording mode
@@ -225,11 +228,6 @@ namespace danceoclock
                                             newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X);
                                             newFrame.Coords.Add(body.Joints[JointType.AnkleRight].ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y);
 
-                                            /*foreach (double coord in newFrame.Coords)
-                                            {
-                                                Console.WriteLine(coord);
-                                            }*/
-
                                             newGesture.AddKeyframe(newFrame);
                                         }
                                         else
@@ -248,19 +246,8 @@ namespace danceoclock
                                 {
                                     currentGesture.setBody(body); // use the right body instance
 
-                                    Console.WriteLine("rep number " + currentRep); 
-
                                     // loop through numrepeats
                                     if (currentRep == Numrepeats) { Close(); }
-
-                                    /*
-                                    // check if max iterations has been reached
-                                    if (++Iterations > Timeout)
-                                    {
-                                        Console.WriteLine("Timeout");
-                                        Iterations = 0;
-                                        currentFrameInd++;
-                                    }*/
 
                                     // match the current keyframe
                                     KeyFrame currentFrame = currentGesture.Keyframes[currentFrameInd];
@@ -278,7 +265,6 @@ namespace danceoclock
                                     // loop through matching angles to compare them
                                     for (int i = 0; i < 10; i++)
                                     {
-                                        //sb.Append("(" + Current[i] + "," + Angles[i] + ") ");
                                         // if the angle is not within the tolerated range
                                         if (!(Math.Abs(Current[i] - currentFrame.Angles[i]) <= Tolerance))
                                         {
@@ -286,13 +272,11 @@ namespace danceoclock
                                             break; // don't have to check anymore
                                         }
                                     }
-                                    //Console.WriteLine(sb.ToString());
 
                                     if (AllMatch)
                                     {
                                         // if all angles match
                                         Iterations = 0;
-                                        Console.WriteLine("matched!");
                                         currentFrameInd++;
                                     }
 
@@ -301,20 +285,17 @@ namespace danceoclock
                                         currentFrameInd = 0;
                                         currentRep++;
                                     }
-
-                                    Console.WriteLine("current frame ind " + currentFrameInd);
-
-                                    //foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
-
-                                    /*if (currentGesture.Match())
-                                    {
-                                        canvas.DrawSkeleton(body, Colors.Green);
-                                        Close();
-                                    } else
-                                    {
-                                        canvas.DrawSkeleton(body, Colors.Red);
-                                    }*/
                                 }
+                            }
+                            else
+                            {
+                                /*
+                                if(frameMessageLabel.Visibility != Visibility.Visible)
+                                {
+                                    frameMessageLabel.Visibility = Visibility.Visible;
+                                    Refresh(frameMessageLabel);
+                                }
+                                */
                             }
                         }
                     }
@@ -373,61 +354,36 @@ namespace danceoclock
             List<double> CurrentAngles = new List<double>();
 
             // calculate and add angles
-
-            //Console.WriteLine("neckangle" + JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
+            
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Head], body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft]));
 
             // shoulderleftangle
-            //Console.WriteLine("shoulderleftangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
+
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]));
 
             // shoulderrightangle
-            //Console.WriteLine("shoulderrightangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]));
 
             // elbowleftangle
-            //Console.WriteLine("elbowleftangle" + JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]));
 
             // elbowrightangle
-           // Console.WriteLine("elbowrightangle" + JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]));
 
             // spineangle
-            //Console.WriteLine("spineangle" + JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.Neck], body.Joints[JointType.SpineBase], body.Joints[JointType.HipLeft]));
 
             // hipleftangle
-            //Console.WriteLine("hipleftangle" + JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeLeft], body.Joints[JointType.HipLeft], body.Joints[JointType.SpineBase]));
 
             // hiprightangle
-            //Console.WriteLine("hiprightangle" + JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.KneeRight], body.Joints[JointType.HipRight], body.Joints[JointType.SpineBase]));
 
             // kneeleftangle 
-            //Console.WriteLine("kneeleftangle" + JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipLeft], body.Joints[JointType.KneeLeft], body.Joints[JointType.AnkleLeft]));
 
             // kneerightangle
-            //Console.WriteLine("kneerightangle" + JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
-
-
-            
-            /*StreamWriter f = new StreamWriter("C:\\Users\\shanali\\Desktop\\penisattempt.txt", true);
-            StringBuilder sb = new StringBuilder();
-            foreach (double angle in CurrentAngles)
-            {
-                sb.Append(angle);
-                sb.Append(" ");
-            }
-            sb.Remove(sb.Length - 1, 1); // trim space
-            Console.WriteLine(sb.ToString());
-
-            //f.WriteLine(sb.ToString());
-            //f.Close();*/
-
 
             return CurrentAngles;
         }
