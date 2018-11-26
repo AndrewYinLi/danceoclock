@@ -52,6 +52,9 @@ namespace danceoclock
         public int currentFrameInd = 0;
         public int Iterations = 0;
 
+        // list of joints for highlighting incorrect joints
+        public List<JointType> joints = null;
+
         // ptr to parent (Andrew's UI)
         MainWindow parent = null;
         string path = null;
@@ -244,6 +247,9 @@ namespace danceoclock
                                 }
                                 else // alarm mode
                                 {
+                                    // populate joints list
+                                    populateJoints();
+
                                     currentGesture.setBody(body); // use the right body instance
 
                                     // loop through numrepeats
@@ -268,6 +274,9 @@ namespace danceoclock
                                         // if the angle is not within the tolerated range
                                         if (!(Math.Abs(Current[i] - currentFrame.Angles[i]) <= Tolerance))
                                         {
+                                            //highlight incorrect joints
+                                            canvas.DrawPoint(body.Joints[joints[i]], Colors.Red);
+
                                             AllMatch = false;
                                             break; // don't have to check anymore
                                         }
@@ -386,6 +395,22 @@ namespace danceoclock
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
 
             return CurrentAngles;
+        }
+
+        public void populateJoints()
+        {
+            joints = new List<JointType>();
+
+            joints.Add(JointType.Neck);
+            joints.Add(JointType.ShoulderLeft);
+            joints.Add(JointType.ShoulderRight);
+            joints.Add(JointType.ElbowLeft);
+            joints.Add(JointType.ElbowRight);
+            joints.Add(JointType.SpineBase);
+            joints.Add(JointType.HipLeft);
+            joints.Add(JointType.HipRight);
+            joints.Add(JointType.KneeLeft);
+            joints.Add(JointType.KneeRight);
         }
     }
 }

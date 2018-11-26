@@ -181,8 +181,8 @@ namespace danceoclock
             // shape for the point
             Ellipse ellipse = new Ellipse
             {
-                Width = 20,
-                Height = 20,
+                Width = 30,
+                Height = 30,
                 Fill = new SolidColorBrush(color)
             };
 
@@ -210,7 +210,7 @@ namespace danceoclock
                 Y1 = first.Position.Y,
                 X2 = second.Position.X,
                 Y2 = second.Position.Y,
-                StrokeThickness = 8,
+                StrokeThickness = 15,
                 Stroke = new SolidColorBrush(color)
             };
             canvas.Children.Add(line);
@@ -229,49 +229,49 @@ namespace danceoclock
             }*/
 
             // head neck
-            canvas.Children.Add(new Line { X1 = coords[0], Y1 = coords[1], X2 = coords[2], Y2 = coords[3], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[0], Y1 = coords[1], X2 = coords[2], Y2 = coords[3], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // neck spine
-            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[16], Y2 = coords[17], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[16], Y2 = coords[17], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // neck left shoulder
-            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[4], Y2 = coords[5], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[4], Y2 = coords[5], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // neck right shoulder
-            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[8], Y2 = coords[9], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[2], Y1 = coords[3], X2 = coords[8], Y2 = coords[9], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // left shoulder elbow
-            canvas.Children.Add(new Line { X1 = coords[4], Y1 = coords[5], X2 = coords[6], Y2 = coords[7], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[4], Y1 = coords[5], X2 = coords[6], Y2 = coords[7], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // right shoulder elbow
-            canvas.Children.Add(new Line { X1 = coords[8], Y1 = coords[9], X2 = coords[10], Y2 = coords[11], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[8], Y1 = coords[9], X2 = coords[10], Y2 = coords[11], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // left elbow wrist
-            canvas.Children.Add(new Line { X1 = coords[6], Y1 = coords[7], X2 = coords[12], Y2 = coords[13], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[6], Y1 = coords[7], X2 = coords[12], Y2 = coords[13], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // right elbow wrist
-            canvas.Children.Add(new Line { X1 = coords[10], Y1 = coords[11], X2 = coords[14], Y2 = coords[15], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[10], Y1 = coords[11], X2 = coords[14], Y2 = coords[15], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // spine left hip
-            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[18], Y2 = coords[19], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[18], Y2 = coords[19], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // spine right hip
-            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[20], Y2 = coords[21], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[20], Y2 = coords[21], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // spine right hip
-            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[20], Y2 = coords[21], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[16], Y1 = coords[17], X2 = coords[20], Y2 = coords[21], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // left hip knee
-            canvas.Children.Add(new Line { X1 = coords[18], Y1 = coords[19], X2 = coords[22], Y2 = coords[23], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[18], Y1 = coords[19], X2 = coords[22], Y2 = coords[23], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // right hip knee
-            canvas.Children.Add(new Line { X1 = coords[20], Y1 = coords[21], X2 = coords[24], Y2 = coords[25], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[20], Y1 = coords[21], X2 = coords[24], Y2 = coords[25], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // left knee foot
-            canvas.Children.Add(new Line { X1 = coords[22], Y1 = coords[23], X2 = coords[26], Y2 = coords[27], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[22], Y1 = coords[23], X2 = coords[26], Y2 = coords[27], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             // right knee foot
-            canvas.Children.Add(new Line { X1 = coords[24], Y1 = coords[25], X2 = coords[28], Y2 = coords[29], StrokeThickness = 8, Stroke = new SolidColorBrush(color) });
+            canvas.Children.Add(new Line { X1 = coords[24], Y1 = coords[25], X2 = coords[28], Y2 = coords[29], StrokeThickness = 15, Stroke = new SolidColorBrush(color) });
 
             /*0 newCoords.Add(body.Joints[JointType.Head].Position.X);
             1 newCoords.Add(body.Joints[JointType.Head].Position.Y);
@@ -311,8 +311,6 @@ namespace danceoclock
             // check if bones are being tracked
             if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return;
 
-            
-
             // 2 joints that the bone connects
             first = first.ScaleTo(canvas.ActualWidth*0.3, canvas.ActualHeight*0.3);
             second = second.ScaleTo(canvas.ActualWidth*0.3, canvas.ActualHeight*0.3);
@@ -324,7 +322,7 @@ namespace danceoclock
                 Y1 = first.Position.Y,
                 X2 = second.Position.X,
                 Y2 = second.Position.Y,
-                StrokeThickness = 5,
+                StrokeThickness = 15,
                 Stroke = new SolidColorBrush(color)
             };
 
