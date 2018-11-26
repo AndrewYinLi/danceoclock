@@ -15,8 +15,6 @@ namespace danceoclock
         // body used to match movements
         public Body Body;
 
-        public int frameIndex = 0;
-
         public Gesture()
         {
             Keyframes = new List<KeyFrame>();
@@ -42,26 +40,6 @@ namespace danceoclock
         public void AddKeyframe(KeyFrame keyframe)
         {
             Keyframes.Add(keyframe);
-        }
-
-        // repeat the specified number of times and match the movements, return whether or not the set was successfully completed
-        public bool Match()
-        {
-            bool correct = true;
-
-            for (int i = 0; i < KinectWindow.Numrepeats; i++) {
-
-                for (int j = 0; j < Keyframes.Count; j++)
-                {
-                    if (!Keyframes[j].Check(KinectWindow.NextFrame(Body))) {
-                        correct = false;
-                        break;
-                    }
-                }
-            }
-
-            if (correct) { Console.WriteLine("matched!!"); } else { Console.WriteLine("no"); }
-            return correct;
         }
     }
 }

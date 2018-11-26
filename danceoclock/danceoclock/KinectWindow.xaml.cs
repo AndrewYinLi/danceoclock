@@ -23,39 +23,41 @@ namespace danceoclock
         // set up kinect
         KinectSensor Sensor;
         MultiSourceFrameReader Reader;
-        public static IList<Body> Bodies; // list of bodies detected
-        public static Gesture newGesture = null;
+        public IList<Body> Bodies; // list of bodies detected
+        public  Gesture newGesture = null;
 
         // tolerance of movement/angle matches in %
-        public static double Tolerance;
+        public double Tolerance;
 
         // maximum number of frames before timeout for each key frame
-        public static double Timeout;
+        public double Timeout;
 
         // number of repeats for each movement
-        public static int Numrepeats;
+        public int Numrepeats;
+        public int currentRep = 0;
 
         // dictionary of available gestures - Gesture.body should be null initially -
         // PUT IN UI MAIN, but keep a copy here (load from UI main via constructor)
-        public static Dictionary<string, Gesture> Gestures; // save/load these in txt file
+        public Dictionary<string, Gesture> Gestures; // save/load these in txt file
 
         // counter for frames
-        public static int CurrentNumFrames = 0;
+        public int CurrentNumFrames = 0;
 
         // Number of seconds to take new frame
-        public static double Freq = 0;
+        public double Freq = 0;
 
         // How long gesture should be
-        public static int Length = 0;
+        public int Length = 0;
 
         // Frames left to record in the gesture
-        public static int FramesLeft = 0;
+        public int FramesLeft = 0;
 
         // mode - either to record new gestures (true) or activate the alarm (false)
-        public static bool Recording = true;
+        public bool Recording = true;
 
-
-        public static Gesture currentGesture = null;
+        public Gesture currentGesture = null;
+        public int currentFrameInd = 0;
+        public int Iterations = 0;
 
         // ptr to parent (Andrew's UI)
         MainWindow parent = null;
@@ -68,7 +70,6 @@ namespace danceoclock
             this.parent = parent;
             this.path = path;
             InitializeComponent();
-
             Freq = sec;
             Length = length;
             FramesLeft = (int) Math.Ceiling(Length / Freq);
@@ -246,18 +247,73 @@ namespace danceoclock
                                 else // alarm mode
                                 {
                                     currentGesture.setBody(body); // use the right body instance
-                                    canvas.DrawRefSkeleton(currentGesture.Keyframes[currentGesture.frameIndex].Coords, Colors.Purple);
+
+                                    Console.WriteLine("rep number " + currentRep); 
+
+                                    // loop through numrepeats
+                                    if (currentRep == Numrepeats) { Close(); }
+
+                                    /*
+                                    // check if max iterations has been reached
+                                    if (++Iterations > Timeout)
+                                    {
+                                        Console.WriteLine("Timeout");
+                                        Iterations = 0;
+                                        currentFrameInd++;
+                                    }*/
+
+                                    // match the current keyframe
+                                    KeyFrame currentFrame = currentGesture.Keyframes[currentFrameInd];
+
+                                    // show reference skeleton
+                                    canvas.DrawRefSkeleton(currentFrame.Coords, Colors.Purple);
+
+                                    // whether or not all the angles match
+                                    bool AllMatch = true;
+                                    StringBuilder sb = new StringBuilder();
+
+                                    // current angles
+                                    List<double> Current = NextFrame(body);
+
+                                    // loop through matching angles to compare them
+                                    for (int i = 0; i < 10; i++)
+                                    {
+                                        //sb.Append("(" + Current[i] + "," + Angles[i] + ") ");
+                                        // if the angle is not within the tolerated range
+                                        if (!(Math.Abs(Current[i] - currentFrame.Angles[i]) <= Tolerance))
+                                        {
+                                            AllMatch = false;
+                                            break; // don't have to check anymore
+                                        }
+                                    }
+                                    //Console.WriteLine(sb.ToString());
+
+                                    if (AllMatch)
+                                    {
+                                        // if all angles match
+                                        Iterations = 0;
+                                        Console.WriteLine("matched!");
+                                        currentFrameInd++;
+                                    }
+
+                                    // after looping through all keyframes, go on to next rep
+                                    if (currentFrameInd == currentGesture.Keyframes.Count()) {
+                                        currentFrameInd = 0;
+                                        currentRep++;
+                                    }
+
+                                    Console.WriteLine("current frame ind " + currentFrameInd);
 
                                     //foreach (double coords in currentGesture.Keyframes[currentGesture.frameIndex].Coords) { Console.WriteLine(coords); }
 
-                                    if (currentGesture.Match())
+                                    /*if (currentGesture.Match())
                                     {
                                         canvas.DrawSkeleton(body, Colors.Green);
                                         Close();
                                     } else
                                     {
                                         canvas.DrawSkeleton(body, Colors.Red);
-                                    }
+                                    }*/
                                 }
                             }
                         }
@@ -358,8 +414,8 @@ namespace danceoclock
             CurrentAngles.Add(JointsAngle(body.Joints[JointType.HipRight], body.Joints[JointType.KneeRight], body.Joints[JointType.AnkleRight]));
 
 
-            /*
-            StreamWriter f = new StreamWriter("C:\\Users\\shanali\\Desktop\\penisattempt.txt", true);
+            
+            /*StreamWriter f = new StreamWriter("C:\\Users\\shanali\\Desktop\\penisattempt.txt", true);
             StringBuilder sb = new StringBuilder();
             foreach (double angle in CurrentAngles)
             {
@@ -367,9 +423,11 @@ namespace danceoclock
                 sb.Append(" ");
             }
             sb.Remove(sb.Length - 1, 1); // trim space
-            f.WriteLine(sb.ToString());
-            f.Close();
-            */
+            Console.WriteLine(sb.ToString());
+
+            //f.WriteLine(sb.ToString());
+            //f.Close();*/
+
 
             return CurrentAngles;
         }

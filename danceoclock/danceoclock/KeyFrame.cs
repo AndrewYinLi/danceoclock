@@ -20,9 +20,6 @@ namespace danceoclock
         // body to read movements from
         public Body Body;
 
-        // number of checking iterations (number of frames)
-        public int Iterations;
-
 
         public void setAngles(List<double> Settings)
         {
@@ -49,7 +46,6 @@ namespace danceoclock
         {
             setAngles(Settings);
             setCoords(newCoords);
-            this.Iterations = 0;
         }
 
         // constructor for record mode - sets all the frame settings
@@ -57,53 +53,6 @@ namespace danceoclock
         {
             setAngles(Settings);
             this.Body = body;
-            this.Iterations = 0;
-        }
-
-        // method for checking if the current frame matches the set frame, return whether or not frame was correctly matched
-        public bool Check(List<double> Current)
-        {
-            // add iteration number
-            Iterations++;
-
-            // if timeout
-            if (Iterations > KinectWindow.Timeout)
-            {
-                // reset frame first
-                Reset();
-                return false;
-            }
-            else
-            {
-                // whether or not all the angles match
-                bool AllMatch = true;
-
-                // loop through matching angles in Current and Angles to compare them
-                for (int i = 0; i < Angles.Count; i++)
-                {
-                    // if the angle is not within the tolerated range
-                    if (!(Math.Abs(Current[i] - Angles[i]) <= KinectWindow.Tolerance))
-                    {
-                        AllMatch = false;
-                        break; // don't have to check anymore
-                    }
-                }
-
-                if (AllMatch) {
-                    // if all angles match
-                    Reset();
-                    return true;
-                } else {
-                    // if not all angles match, recurse
-                    return Check(KinectWindow.NextFrame(Body));
-                }
-            }
-        }
-
-        // method for resetting iterations
-        private void Reset()
-        {
-            Iterations = 0;
         }
     }
 }
