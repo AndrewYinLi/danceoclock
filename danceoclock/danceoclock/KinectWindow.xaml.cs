@@ -278,7 +278,7 @@ namespace danceoclock
                                             canvas.DrawPoint(body.Joints[joints[i]], Colors.Red);
 
                                             AllMatch = false;
-                                            break; // don't have to check anymore
+                                            //break; // don't have to check anymore
                                         }
                                     }
 
