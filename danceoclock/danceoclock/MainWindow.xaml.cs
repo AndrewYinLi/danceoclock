@@ -65,7 +65,7 @@ namespace danceoclock {
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
             Application.Current.Dispatcher.Invoke((Action)delegate {
-                KinectWindow kw = new KinectWindow(nextAlarmActionPath, nextAlarmMusicPath, 10, 60, 2);
+                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, 10, 60, 2);
                 kw.Show();
             });
             checkNextAlarm();
@@ -128,9 +128,9 @@ namespace danceoclock {
             newAlarmWindow.Show();
         }
 
-        private void snoozeAlarmButton_Click(object sender, RoutedEventArgs e) {
-            if(alarmList[alarmListBox.SelectedIndex].snoozes++ < 2) {
-                alarmList[alarmListBox.SelectedIndex].minute += 5;
+        public void snooze() {
+            if(alarmList[0].snoozes++ < 2) {
+                alarmList[0].minute += 5;
                 refreshAlarms();
                 checkNextAlarm();
             }
@@ -146,7 +146,7 @@ namespace danceoclock {
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //string gesturePath, double tolerance, double timeout, int numrepeats
-            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 10, 60, 2);
+            KinectWindow kw = new KinectWindow(this, "C:\\Users\\shanali\\Desktop\\penis.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 10, 60, 2);
             kw.Show();
         }
     }

@@ -77,8 +77,9 @@ namespace danceoclock
 
 
         // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
-        public KinectWindow(string gesturePath, string musicPath, double tolerance, double timeout, int numrepeats)
+        public KinectWindow(MainWindow parent, string gesturePath, string musicPath, double tolerance, double timeout, int numrepeats)
         {
+            this.parent = parent;
             Recording = false;
 
             Tolerance = tolerance;
@@ -134,6 +135,12 @@ namespace danceoclock
                 Reader = Sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
                 Reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
+        }
+
+        private void snoozeAlarmButton_Click(object sender, RoutedEventArgs e)
+        {
+            parent.snooze();
+            Close();
         }
 
         // when closing window

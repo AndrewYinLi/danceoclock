@@ -10,6 +10,7 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
+        <Button x:Name="snoozeAlarmButton" Content="Snooze" HorizontalAlignment="Left" Height="79" Margin="1683,945,0,0" VerticalAlignment="Top" Width="200" Click="snoozeAlarmButton_Click" RenderTransformOrigin="-0.217,0.52" FontSize="24"/>
 
 
     </Grid>
