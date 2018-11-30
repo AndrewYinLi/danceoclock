@@ -20,6 +20,9 @@ namespace danceoclock
         public IList<Body> Bodies; // list of bodies detected
         public  Gesture newGesture = null;
 
+        // music player
+        WindowsMediaPlayer Player;
+
         // tolerance of movement/angle matches in %
         public double Tolerance;
 
@@ -102,14 +105,21 @@ namespace danceoclock
             }
             currentGesture = gesture;
             InitializeComponent();
-            //Task.Run(() => loopMusic(musicPath));
+
+            Player = new WindowsMediaPlayer();
+            Player.PlayStateChange +=
+                new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+            Player.URL = musicPath;
+
+            Player.controls.play();
         }
 
-        public void loopMusic(string musicPath)
+        private void Player_PlayStateChange(int currentState)
         {
-            WindowsMediaPlayer player = new WindowsMediaPlayer();
-            player.URL = musicPath;
-            player.controls.play();
+            if ((WMPPlayState)currentState == WMPPlayState.wmppsStopped)
+            {
+                Player.controls.play();
+            }
         }
 
         // when loading window, set up sensor
@@ -138,6 +148,8 @@ namespace danceoclock
             {
                 Sensor.Close();
             }
+
+            Player.close();
         }
 
         /*.
