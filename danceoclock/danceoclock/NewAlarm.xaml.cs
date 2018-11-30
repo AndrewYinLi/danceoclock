@@ -37,7 +37,7 @@ namespace danceoclock {
                     amButton.IsChecked = false;
                     pmButton.IsChecked = true;
                 }
-                actionTextBox.Text = oldAlarm.action;
+                actionTextBox.Text = oldAlarm.actionPath;
             }
             
         }

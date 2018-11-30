@@ -6,7 +6,8 @@ using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
 using System.IO;
-using System.Windows.Threading;
+using System.Threading.Tasks;
+using WMPLib;
 
 namespace danceoclock
 {
@@ -73,7 +74,7 @@ namespace danceoclock
 
 
         // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
-        public KinectWindow(string gesturePath, double tolerance, double timeout, int numrepeats)
+        public KinectWindow(string gesturePath, string musicPath, double tolerance, double timeout, int numrepeats)
         {
             Recording = false;
 
@@ -100,8 +101,15 @@ namespace danceoclock
                 gesture.Keyframes.Add(frame);
             }
             currentGesture = gesture;
-
             InitializeComponent();
+            //Task.Run(() => loopMusic(musicPath));
+        }
+
+        public void loopMusic(string musicPath)
+        {
+            WindowsMediaPlayer player = new WindowsMediaPlayer();
+            player.URL = musicPath;
+            player.controls.play();
         }
 
         // when loading window, set up sensor
@@ -278,7 +286,7 @@ namespace danceoclock
                                             canvas.DrawPoint(body.Joints[joints[i]], Colors.Red);
 
                                             AllMatch = false;
-                                            //break; // don't have to check anymore
+                                            // break; // don't have to check anymore
                                         }
                                     }
 

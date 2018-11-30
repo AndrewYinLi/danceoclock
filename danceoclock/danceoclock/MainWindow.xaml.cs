@@ -24,7 +24,11 @@ namespace danceoclock {
     public partial class MainWindow : Window {
 
         private List<Alarm> alarmList = new List<Alarm>();
-        
+        Timer nextAlarm;
+        int nextAlarmChronologicalPriority = -1;
+        string nextAlarmMusicPath = "";
+        string nextAlarmActionPath = "";
+
         public void refreshAlarms() {
             alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
             alarmListBox.Items.Clear();
@@ -34,40 +38,49 @@ namespace danceoclock {
             
         }
 
-        /* This function was taken from: https://stackoverflow.com/questions/21299214/how-to-set-timer-to-execute-at-specific-time-in-c-sharp */
-        Timer timer;
-        void setup_Timer() {
+        void checkNextAlarm() {
+            if (alarmList.Count == 0) return;
+            Alarm mostRecent = alarmList[0];
+            if(nextAlarmChronologicalPriority == -1 || mostRecent.getChronologicalPriority() < nextAlarmChronologicalPriority)
+            {
+                setNextAlarm(mostRecent.year, mostRecent.month, mostRecent.day, mostRecent.armyHour, mostRecent.minute);
+                nextAlarmChronologicalPriority = mostRecent.getChronologicalPriority();
+                nextAlarmMusicPath = mostRecent.musicPath;
+                nextAlarmActionPath = mostRecent.actionPath;
+            }
+        }
+
+        void setNextAlarm(int year, int month, int day, int hour, int minute) {
             DateTime currentTime = DateTime.Now;
-            DateTime targetTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 2, 47, 0);
-            if (currentTime > targetTime)
-                targetTime = targetTime.AddDays(1);
+            DateTime targetDate = new DateTime(year, month, day);
+            DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
 
             double tickTime = (targetTime - currentTime).TotalMilliseconds;
-            timer = new Timer(tickTime);
-            timer.Elapsed += timer_Elapsed;
-            timer.Start();
+            nextAlarm = new Timer(tickTime);
+            nextAlarm.Elapsed += nextAlarmElapsed;
+            nextAlarm.Start();
         }
 
         
-        void timer_Elapsed(object sender, ElapsedEventArgs e) {
-            timer.Stop();
-
-            SoundPlayer player = new SoundPlayer();
-            player.SoundLocation = "C:\\Users\\andre\\Downloads\\sample.wav";
-            player.Play();
+        void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
+            nextAlarm.Stop();
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                KinectWindow kw = new KinectWindow(nextAlarmActionPath, nextAlarmMusicPath, 10, 60, 2);
+                kw.Show();
+            });
+            checkNextAlarm();
         }
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
             alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action));
             refreshAlarms();
-            
+            checkNextAlarm();
         }
 
         public void writeGesture(Gesture gesture, string path)
         {
             //StreamWriter f = new StreamWriter(path, true); // The overload with a true bool appends to file instead of overwriting
             StreamWriter f = new StreamWriter(path);
-            // how write body???????
             foreach(KeyFrame frame in gesture.Keyframes)
             {
                 StringBuilder sb = new StringBuilder();
@@ -91,7 +104,6 @@ namespace danceoclock {
 
         public MainWindow() {
             InitializeComponent();
-            setup_Timer();
         }
 
         private void newAlarmButton_Click(object sender, RoutedEventArgs e) {
@@ -100,8 +112,12 @@ namespace danceoclock {
         }
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
-            alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
-            refreshAlarms();
+            if (alarmListBox.SelectedIndex != -1)
+            {
+                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                refreshAlarms();
+                checkNextAlarm();
+            }
             
         }
 
@@ -116,16 +132,9 @@ namespace danceoclock {
             if(alarmList[alarmListBox.SelectedIndex].snoozes++ < 2) {
                 alarmList[alarmListBox.SelectedIndex].minute += 5;
                 refreshAlarms();
+                checkNextAlarm();
             }
             
-        }
-
-        private void abortAlarmButton_Click(object sender, RoutedEventArgs e) {
-            if (alarmListBox.SelectedIndex != -1)
-            {
-                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
-                refreshAlarms();
-            }
         }
 
         private void recordActionButton_Click(object sender, RoutedEventArgs e)
@@ -137,7 +146,7 @@ namespace danceoclock {
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //string gesturePath, double tolerance, double timeout, int numrepeats
-            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", 10, 60, 2);
+            KinectWindow kw = new KinectWindow("C:\\Users\\shanali\\Desktop\\penis.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 10, 60, 2);
             kw.Show();
         }
     }

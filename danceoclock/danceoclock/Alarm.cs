@@ -14,10 +14,11 @@ namespace danceoclock {
         public int hour { get; set; }
         public int minute { get; set; }
         public bool isAM { get; set; }
-        public string action { get; set; }
+        public string actionPath { get; set; }
         public int snoozes { get; set; }
+        public int armyHour { get; set; }
 
-        public Alarm(string musicPath, string date, int hour, int minute, bool isAM, string action) {
+        public Alarm(string musicPath, string date, int hour, int minute, bool isAM, string actionPath) {
             this.musicPath = musicPath;
             this.date = date;
             string[] dateSplit = date.Split('/');
@@ -27,8 +28,23 @@ namespace danceoclock {
             this.hour = hour;
             this.minute = minute;
             this.isAM = isAM;
-            this.action = action;
+            this.actionPath = actionPath;
             this.snoozes = 0;
+            if (isAM)
+            {
+                if(hour == 12)
+                {
+                    this.armyHour = 0;
+                }
+                else
+                {
+                    this.armyHour = hour;
+                }
+            }
+            else
+            {
+                this.armyHour = 12 + hour;
+            }
         }
 
         public string placeholderZero(int chron) {
@@ -40,12 +56,12 @@ namespace danceoclock {
         }
 
         public int getChronologicalPriority() {
-            String yearStr = (year+"").Substring(2);
-            String monthStr = placeholderZero(month) + month;
-            String dayStr = placeholderZero(day) + day;
-            int armyHour = ((isAM) ? 0 : 12) + hour;
-            String hourStr = placeholderZero(armyHour) + armyHour;
-            String minuteStr = placeholderZero(minute) + minute;
+            string yearStr = (year+"").Substring(2);
+            string monthStr = placeholderZero(month) + month;
+            string dayStr = placeholderZero(day) + day;
+           
+            string hourStr = placeholderZero(armyHour) + armyHour;
+            string minuteStr = placeholderZero(minute) + minute;
             //System.Diagnostics.Debug.Write(yearStr + monthStr + dayStr + hourStr + minuteStr);
             return Int32.Parse(yearStr + monthStr + dayStr + hourStr + minuteStr);
         }
