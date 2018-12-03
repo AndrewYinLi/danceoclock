@@ -5,12 +5,12 @@
     <Grid>
         <Image Name="camera" />
         <Canvas Name="canvas" />
-        <Label x:Name="frameMessageLabel" Content="Get in frame of the Kinect sensor!" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Width="1020" FontSize="72" Foreground="White" FontFamily="Times New Roman" FontStyle="Italic" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False" Visibility="Visible">
+        <Label x:Name="frameMessageLabel" Content="Get in frame of the Kinect sensor!" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Width="1020" FontSize="72" Foreground="White" FontFamily="Times New Roman" FontStyle="Italic" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False" Visibility="Hidden">
             <Label.Effect>
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
-        <Button x:Name="snoozeAlarmButton" Content="Snooze" HorizontalAlignment="Left" Height="79" Margin="1683,945,0,0" VerticalAlignment="Top" Width="200" Click="snoozeAlarmButton_Click" RenderTransformOrigin="-0.217,0.52" FontSize="24"/>
+        <Button x:Name="snoozeAlarmButton" Content="Snooze" Height="126" Margin="0,0,9.556,9.889" VerticalAlignment="Bottom" Click="snoozeAlarmButton_Click" RenderTransformOrigin="-0.217,0.52" FontSize="50" HorizontalAlignment="Right" Width="291" FontFamily="Times New Roman" FontStyle="Italic" FontWeight="ExtraBlack"/>
 
 
     </Grid>

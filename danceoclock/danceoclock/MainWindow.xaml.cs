@@ -24,30 +24,51 @@ namespace danceoclock {
     public partial class MainWindow : Window {
 
         private List<Alarm> alarmList = new List<Alarm>();
-        Timer nextAlarm;
+        static Timer nextAlarm = null;
         int nextAlarmChronologicalPriority = -1;
         string nextAlarmMusicPath = "";
         string nextAlarmActionPath = "";
 
         public void refreshAlarms() {
             alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
-            alarmListBox.Items.Clear();
-            foreach (Alarm alarm in alarmList) {
-                alarmListBox.Items.Add(alarm.getFiller());
-            }
+            Dispatcher.Invoke(() =>
+            {
+                alarmListBox.Items.Clear();
+                foreach (Alarm alarm in alarmList)
+                {
+                    alarmListBox.Items.Add(alarm.getFiller());
+                }
+            });
             
         }
 
-        void checkNextAlarm() {
+        public void disableAlarm(int alarmListIndex)
+        {
+            alarmList.RemoveAt(alarmListIndex);
+            refreshAlarms();
+        }
+
+        public void checkNextAlarm() {
+            if (alarmList.Count == 0)
+            {
+                if (nextAlarm != null) nextAlarm.Stop();
+                return;
+            }
+            Alarm mostRecent = alarmList[0];
+            if (nextAlarmChronologicalPriority == -1 || mostRecent.getChronologicalPriority() < nextAlarmChronologicalPriority)
+            {
+                forceNextAlarm();
+            }
+        }
+
+        void forceNextAlarm()
+        {
             if (alarmList.Count == 0) return;
             Alarm mostRecent = alarmList[0];
-            if(nextAlarmChronologicalPriority == -1 || mostRecent.getChronologicalPriority() < nextAlarmChronologicalPriority)
-            {
-                setNextAlarm(mostRecent.year, mostRecent.month, mostRecent.day, mostRecent.armyHour, mostRecent.minute);
-                nextAlarmChronologicalPriority = mostRecent.getChronologicalPriority();
-                nextAlarmMusicPath = mostRecent.musicPath;
-                nextAlarmActionPath = mostRecent.actionPath;
-            }
+            setNextAlarm(mostRecent.year, mostRecent.month, mostRecent.day, mostRecent.armyHour, mostRecent.minute);
+            nextAlarmChronologicalPriority = mostRecent.getChronologicalPriority();
+            nextAlarmMusicPath = mostRecent.musicPath;
+            nextAlarmActionPath = mostRecent.actionPath;
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
@@ -65,10 +86,12 @@ namespace danceoclock {
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
             Application.Current.Dispatcher.Invoke((Action)delegate {
-                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, 10, 60, 2);
+                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, 30, 60, 2);
                 kw.Show();
             });
-            checkNextAlarm();
+            disableAlarm(0);
+            refreshAlarms();
+            forceNextAlarm();
         }
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
@@ -128,12 +151,14 @@ namespace danceoclock {
             newAlarmWindow.Show();
         }
 
-        public void snooze() {
+        public bool snooze() {
             if(alarmList[0].snoozes++ < 2) {
                 alarmList[0].minute += 5;
                 refreshAlarms();
                 checkNextAlarm();
+                return true;
             }
+            return false;
             
         }
 
@@ -146,7 +171,7 @@ namespace danceoclock {
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //string gesturePath, double tolerance, double timeout, int numrepeats
-            KinectWindow kw = new KinectWindow(this, "C:\\Users\\shanali\\Desktop\\penis.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 10, 60, 2);
+            KinectWindow kw = new KinectWindow(this, "C:\\Users\\shanali\\Desktop\\james.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 20, 60, 2);
             kw.Show();
         }
     }

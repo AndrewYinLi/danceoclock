@@ -79,13 +79,24 @@ namespace danceoclock
         // constructor for alarm mode, gestNamesList (list of names of all gestures used in order) comes from UI main
         public KinectWindow(MainWindow parent, string gesturePath, string musicPath, double tolerance, double timeout, int numrepeats)
         {
+            // Window style
+            WindowState = WindowState.Maximized;
+            WindowStyle = WindowStyle.SingleBorderWindow;
+
+            // Frame event params
             this.parent = parent;
             Recording = false;
-
             Tolerance = tolerance;
             Timeout = timeout;
             Numrepeats = numrepeats;
 
+            // Music
+            Player = new WindowsMediaPlayer();
+            Player.PlayStateChange += new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+            Player.URL = musicPath;
+            Player.controls.play();
+
+            // Gesture params
             Gesture gesture = new Gesture();
             string[] lines = File.ReadAllLines(gesturePath);
             foreach(string line in lines)
@@ -105,14 +116,9 @@ namespace danceoclock
                 gesture.Keyframes.Add(frame);
             }
             currentGesture = gesture;
+
             InitializeComponent();
 
-            Player = new WindowsMediaPlayer();
-            Player.PlayStateChange +=
-                new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
-            Player.URL = musicPath;
-
-            Player.controls.play();
         }
 
         private void Player_PlayStateChange(int currentState)
@@ -126,6 +132,7 @@ namespace danceoclock
         // when loading window, set up sensor
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
             Sensor = KinectSensor.GetDefault();
 
             if (Sensor != null)
@@ -135,38 +142,22 @@ namespace danceoclock
                 Reader = Sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
                 Reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
+
         }
 
         private void snoozeAlarmButton_Click(object sender, RoutedEventArgs e)
         {
-            parent.snooze();
-            Close();
+            if(parent.snooze()) Close();
         }
 
         // when closing window
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (Reader != null)
-            {
-                Reader.Dispose();
-            }
-
-            if (Sensor != null)
-            {
-                Sensor.Close();
-            }
-
-            Player.close();
+            // Close stuff for safety
+            if (Reader != null) Reader.Dispose();
+            if (Sensor != null) Sensor.Close();
+            if (!Recording) Player.close();
         }
-
-        /*.
-        private static Action EmptyDelegate = delegate () { };
-
-        public static void Refresh(UIElement uiElement)
-        {
-            uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
-        }
-        */
 
         // method for reading information from the sensor
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
