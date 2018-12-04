@@ -24,6 +24,7 @@ namespace danceoclock {
     public partial class MainWindow : Window {
 
         private List<Alarm> alarmList = new List<Alarm>();
+        private List<Alarm> inactiveList = new List<Alarm>();
         static Timer nextAlarm = null;
         int nextAlarmChronologicalPriority = -1;
         string nextAlarmMusicPath = "";
@@ -43,9 +44,12 @@ namespace danceoclock {
             Dispatcher.Invoke(() =>
             {
                 alarmListBox.Items.Clear();
+                foreach (Alarm alarm in inactiveList) {
+                    alarmListBox.Items.Add("[Inactive] " + alarm.getFiller());
+                }
                 foreach (Alarm alarm in alarmList)
                 {
-                    alarmListBox.Items.Add(alarm.getFiller());
+                    alarmListBox.Items.Add("[Active] " + alarm.getFiller());
                 }
             });
             
@@ -53,6 +57,8 @@ namespace danceoclock {
 
         public void disableAlarm(int alarmListIndex)
         {
+            inactiveList.Add(alarmList[alarmListIndex]);
+            if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) nextAlarm.Stop();
             alarmList.RemoveAt(alarmListIndex);
             refreshAlarms();
         }
@@ -84,10 +90,10 @@ namespace danceoclock {
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
-            //DateTime currentTime = DateTime.Now;
+            DateTime currentTime = DateTime.Now;
             DateTime targetDate = new DateTime(year, month, day);
             DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
-            DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
+            //DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
             Console.WriteLine(targetTime.ToString());
             Console.WriteLine(currentTime.ToString());
             double tickTime = (targetTime - currentTime).TotalMilliseconds;
@@ -104,8 +110,8 @@ namespace danceoclock {
                 kw.Show();
             });
             disableAlarm(0);
-            refreshAlarms();
             forceNextAlarm();
+            refreshAlarms();
         }
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action, int numrepeats, int tolerance, int timeout) {
@@ -160,6 +166,7 @@ namespace danceoclock {
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
             if (alarmListBox.SelectedIndex != -1)
             {
+                if (nextAlarmChronologicalPriority == alarmList[alarmListBox.SelectedIndex].getChronologicalPriority()) nextAlarm.Stop();
                 alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
                 refreshAlarms();
                 checkNextAlarm();
