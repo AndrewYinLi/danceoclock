@@ -60,3 +60,13 @@ C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\Interop.W
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.ResolveComReference.cache
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.g.cs
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\bin\Debug\Microsoft.Kinect.xml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\Interop.WMPLib.dll
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.ResolveComReference.cache
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\KinectWindow.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\KinectWindow.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\NewAction.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.g.cs
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\NewAction.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.baml
+C:\Users\andre\Documents\GitHub\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.CopyComplete

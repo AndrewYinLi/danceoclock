@@ -51,7 +51,7 @@ namespace danceoclock {
             }
             else
             {
-                this.armyHour = 12 + hour;
+                this.armyHour = 11 + hour;
             }
         }
 

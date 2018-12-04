@@ -84,10 +84,12 @@ namespace danceoclock {
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
-            DateTime currentTime = DateTime.Now;
+            //DateTime currentTime = DateTime.Now;
             DateTime targetDate = new DateTime(year, month, day);
             DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
-
+            DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
+            Console.WriteLine(targetTime.ToString());
+            Console.WriteLine(currentTime.ToString());
             double tickTime = (targetTime - currentTime).TotalMilliseconds;
             nextAlarm = new Timer(tickTime);
             nextAlarm.Elapsed += nextAlarmElapsed;
