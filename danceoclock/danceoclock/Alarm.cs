@@ -18,7 +18,15 @@ namespace danceoclock {
         public int snoozes { get; set; }
         public int armyHour { get; set; }
 
-        public Alarm(string musicPath, string date, int hour, int minute, bool isAM, string actionPath) {
+        // kinectwindow settings
+        public int numrepeats;
+        public int tolerance;
+        public int timeout;
+
+        public Alarm(string musicPath, string date, int hour, int minute, bool isAM, string actionPath, int numrepeats, int tolerance, int timeout) {
+            this.numrepeats = numrepeats;
+            this.tolerance = tolerance;
+            this.timeout = timeout;
             this.musicPath = musicPath;
             this.date = date;
             string[] dateSplit = date.Split('/');

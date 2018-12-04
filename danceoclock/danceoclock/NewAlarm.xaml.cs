@@ -22,14 +22,16 @@ namespace danceoclock {
 
         private MainWindow parent;
         private Alarm oldAlarm;
+        public bool isOpen;
 
         public NewAlarmWindow(MainWindow parent, Alarm oldAlarm) {
             InitializeComponent();
+            alarmDatePicker.SelectedDate = DateTime.Today;
             musicPathTextBox.TextWrapping = TextWrapping.NoWrap;
             this.parent = parent;
             this.oldAlarm = oldAlarm;
             if (oldAlarm != null) {
-                musicPathTextBox.Text = oldAlarm.musicPath;
+                musicPathTextBox.Text = oldAlarm.musicPath; 
                 alarmDatePicker.SelectedDate = new DateTime(oldAlarm.year, oldAlarm.month, oldAlarm.day);
                 hoursTextBox.Text = oldAlarm.hour+"";
                 minutesTextBox.Text = oldAlarm.minute+"";
@@ -39,7 +41,9 @@ namespace danceoclock {
                 }
                 actionTextBox.Text = oldAlarm.actionPath;
             }
-            
+
+            this.Closed += new EventHandler(NewAlarmWindow_Closed);
+
         }
 
         private void browseMusicButton_Click(object sender, RoutedEventArgs e) {
@@ -59,9 +63,73 @@ namespace danceoclock {
         }
 
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
-            parent.createNewAlarm(musicPathTextBox.Text, alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text), (amButton.IsChecked == true) ? true : false, actionTextBox.Text);
-            if(oldAlarm != null) parent.refreshAlarms();
-            Close();
+            try
+            {
+                // validate audio file
+                if (!string.Equals(musicPathTextBox.Text.Substring(Math.Max(0, musicPathTextBox.Text.Length - 4)), ".mp3"))
+                {
+                    MessageBoxResult result = MessageBox.Show("Invalid music file.",
+                                                              "File Error",
+                                                              MessageBoxButton.OK,
+                                                              MessageBoxImage.Error);
+                }
+
+                // validate action file
+                else if (!string.Equals(actionTextBox.Text.Substring(Math.Max(0, actionTextBox.Text.Length - 4)), ".txt"))
+                {
+                    MessageBoxResult result = MessageBox.Show("Invalid action file.",
+                                                              "File Error",
+                                                              MessageBoxButton.OK,
+                                                              MessageBoxImage.Error);
+                }
+
+                // validate numbers
+                int numrepeats, tolerance, timeout = 0;
+
+                Int32.TryParse(RepBox.Text, out numrepeats);
+                Int32.TryParse(ToleranceBox.Text, out tolerance);
+                Int32.TryParse(MaxtimeBox.Text, out timeout);
+
+                if (numrepeats <= 0)
+                {
+                    MessageBoxResult result = MessageBox.Show("Repetitions must be a positive integer.",
+                                          "Input Error",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                }
+
+                else if (tolerance <= 0 || tolerance >= 360)
+                {
+                    MessageBoxResult result = MessageBox.Show("Tolerance must be an integer angle greater than 0 and less than 360.",
+                                          "Input Error",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                }
+
+                else if (timeout <= 0)
+                {
+                    MessageBoxResult result = MessageBox.Show("Maximum Frame Time must be a positive integer.",
+                                          "Input Error",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                }
+
+                else
+                {
+                    parent.createNewAlarm(musicPathTextBox.Text, alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text), 
+                        (amButton.IsChecked == true) ? true : false, actionTextBox.Text, numrepeats, tolerance, timeout * 30);
+                    if (oldAlarm != null) parent.refreshAlarms();
+                    isOpen = false;
+                    Close();
+                }
+
+            } catch (System.FormatException) // TODO fix time formatting settings
+            {
+                MessageBoxResult result = MessageBox.Show("Please set a valid time.",
+                                          "Input Error",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+            }
         }
 
         private void hoursTextBox_MouseEnter(object sender, MouseEventArgs e)
@@ -78,6 +146,11 @@ namespace danceoclock {
             {
                 minutesTextBox.Text = "";
             }
+        }
+
+        void NewAlarmWindow_Closed(object sender, EventArgs e)
+        {
+            isOpen = false;
         }
     }
 }

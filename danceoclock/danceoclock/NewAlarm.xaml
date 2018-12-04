@@ -5,22 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:danceoclock"
         mc:Ignorable="d"
-        Title="New Alarm" Height="202.86" Width="370.595">
-    <Grid>
-        <Label x:Name="label" Content="Music:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        Title="New Alarm" Height="264" Width="380.444">
+    <Grid Margin="4,0,6,10.889" HorizontalAlignment="Center" Width="366">
+
+        <Label x:Name="label" Content="Music:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top"/>
         <Button x:Name="browseMusicButton" Content="Browse..." HorizontalAlignment="Left" Margin="272,14,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="browseMusicButton_Click"/>
-        <TextBox x:Name="musicPathTextBox" HorizontalAlignment="Left" Height="22" Margin="59,14,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="200" AutomationProperties.Name="b"/>
-        <RadioButton x:Name="amButton" Content="AM" HorizontalAlignment="Left" Margin="120,82,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <RadioButton x:Name="pmButton" Content="PM" HorizontalAlignment="Left" Margin="163,82,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.531,3.988"/>
-        <Label x:Name="label1" Content="Time:" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.147,0.558"/>
-        <DatePicker x:Name="alarmDatePicker" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="337"/>
-        <TextBox x:Name="hoursTextBox" HorizontalAlignment="Left" Height="20" Margin="48,79,0,0" TextWrapping="Wrap" Text="h" VerticalAlignment="Top" Width="27" MouseEnter="hoursTextBox_MouseEnter"/>
-        <TextBox x:Name="minutesTextBox" HorizontalAlignment="Left" Height="20" Margin="88,79,0,0" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" Width="27" MouseEnter="minutesTextBox_MousEnter"/>
-        <Label x:Name="label2" Content=":" HorizontalAlignment="Left" Margin="75,73,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="createAlarmButton" Content="Create" HorizontalAlignment="Left" Margin="10,142,0,0" VerticalAlignment="Top" Width="337" Click="createAlarmButton_Click"/>
-        <TextBox x:Name="actionTextBox" HorizontalAlignment="Left" Height="22" Margin="54,109,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="200" AutomationProperties.Name="b"/>
-        <Label x:Name="label_Copy" Content="Action:" HorizontalAlignment="Left" Margin="7,105,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="browseActionTextBox" Content="Browse..." HorizontalAlignment="Left" Margin="272,109,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="browseActionTextBox_Click"/>
+        <TextBox x:Name="musicPathTextBox" HorizontalAlignment="Left" Height="22" Margin="59,14,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="203" AutomationProperties.Name="b"/>
+        <RadioButton x:Name="amButton" Content="AM" HorizontalAlignment="Left" Margin="120,119,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <RadioButton x:Name="pmButton" Content="PM" HorizontalAlignment="Left" Margin="163,119,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.531,3.988"/>
+        <Label x:Name="label1" Content="Time:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.147,0.558" Grid.RowSpan="2"/>
+        <DatePicker x:Name="alarmDatePicker" HorizontalAlignment="Left" Margin="16,80,0,0" VerticalAlignment="Top" Width="331" />
+        <TextBox x:Name="hoursTextBox" HorizontalAlignment="Left" Height="20" Margin="50,116,0,0" TextWrapping="Wrap" Text="h" VerticalAlignment="Top" Width="27" MouseEnter="hoursTextBox_MouseEnter"/>
+        <TextBox x:Name="minutesTextBox" HorizontalAlignment="Left" Height="20" Margin="88,116,0,0" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" Width="27" MouseEnter="minutesTextBox_MousEnter"/>
+        <Label x:Name="label2" Content=":" HorizontalAlignment="Left" Margin="75,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
+        <TextBox x:Name="actionTextBox" HorizontalAlignment="Left" Height="22" Margin="59,48,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="203" AutomationProperties.Name="b"/>
+        <Label x:Name="label_Copy" Content="Action:" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="browseActionTextBox" Content="Browse..." HorizontalAlignment="Left" Margin="272,48,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="browseActionTextBox_Click"/>
+        <Label x:Name="label_Copy2" Content="Repetitions:" HorizontalAlignment="Left" Margin="232,112,0,0" VerticalAlignment="Top" ToolTip="Number of times that the movement routine is repeated." Grid.RowSpan="2"/>
+        <TextBox x:Name="RepBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" Margin="304,113,0,0" Text="1"/>
+        <Button x:Name="createAlarmButton" Content="Create" HorizontalAlignment="Left" Margin="16,178.222,0,0" VerticalAlignment="Top" Width="331" Click="createAlarmButton_Click" Height="39"/>
+        <Label x:Name="label_Copy1" Content="Tolerance (degrees):" HorizontalAlignment="Left" Margin="10,143.221,0,0" VerticalAlignment="Top" ToolTip="Tolerance for matching movements, in terms of the angles between joints in the body."/>
+        <TextBox x:Name="ToleranceBox" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="32" Margin="126,147.222,0,0" Text="35"/>
+        <TextBox x:Name="MaxtimeBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="32" Margin="294,146.222,0,0" Text="5"/>
+        <Label x:Name="label_Copy3" Content="Maximum Frame Time:" HorizontalAlignment="Left" Margin="163,143.221,0,0" VerticalAlignment="Top" ToolTip="Maximum amount of time spent on matching each movement frame before it is skipped."/>
+        <Label x:Name="label_Copy4" Content="sec" HorizontalAlignment="Left" Margin="325,143.221,-9,0" VerticalAlignment="Top" ToolTip="" Width="34"/>
 
     </Grid>
 </Window>

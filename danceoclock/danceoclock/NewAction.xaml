@@ -5,14 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:danceoclock"
         mc:Ignorable="d"
-        Title="New Action" Height="164.667" Width="460.888">
+        Title="New Action" Height="226.889" Width="460.888">
     <Grid>
-        <TextBox x:Name="fileNameTextBox" HorizontalAlignment="Left" Height="23" Margin="78,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
-        <TextBox x:Name="dirTextBox" HorizontalAlignment="Left" Height="23" Margin="78,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
-        <Label Content="File Name:" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top"/>
-        <Label Content="Save to:" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="recordButton" Content="Record" HorizontalAlignment="Left" Margin="78,96,0,0" VerticalAlignment="Top" Width="275" Height="24" Click="recordButton_Click"/>
-        <Button x:Name="browseDirButton" Content="Browse..." HorizontalAlignment="Left" Margin="367,58,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="browsePathButton_Click"/>
-        <Label Content=".txt" HorizontalAlignment="Left" Margin="350,17,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="fileNameTextBox" HorizontalAlignment="Left" Height="23" Margin="82,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
+        <TextBox x:Name="dirTextBox" HorizontalAlignment="Left" Height="23" Margin="82,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
+        <Label Content="File Name:" HorizontalAlignment="Left" Margin="14,59,0,0" VerticalAlignment="Top"/>
+        <Label Content="Save to:" HorizontalAlignment="Left" Margin="14,97,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="recordButton" Content="Record" HorizontalAlignment="Left" Margin="14,138,0,0" VerticalAlignment="Top" Width="432" Height="42" Click="recordButton_Click"/>
+        <Button x:Name="browseDirButton" Content="Browse..." HorizontalAlignment="Left" Margin="371,100,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="browsePathButton_Click"/>
+        <Label Content=".txt" HorizontalAlignment="Left" Margin="354,59,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Recording Length:" VerticalAlignment="Top" Margin="16,23,0,0" ToolTip="How long your movement routine is."/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame Sample Rate:" VerticalAlignment="Top" Margin="233,23,0,0" ToolTip="How often a frame should be taken to match movements when the alarm goes off."/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="seconds" VerticalAlignment="Top" Margin="167,23,0,0" ToolTip="How long your movement routine is."/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="seconds" VerticalAlignment="Top" Margin="392,23,0,0" ToolTip="How long your movement routine is."/>
+        <TextBox x:Name="lengthBox" HorizontalAlignment="Left" Height="21" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="43" Margin="119,22,0,0" TextAlignment="Center"/>
+        <TextBox x:Name="rateBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top" Width="43" Margin="344,22,0,0" TextAlignment="Center"/>
     </Grid>
 </Window>

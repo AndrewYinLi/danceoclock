@@ -28,6 +28,15 @@ namespace danceoclock {
         int nextAlarmChronologicalPriority = -1;
         string nextAlarmMusicPath = "";
         string nextAlarmActionPath = "";
+        int nextAlarmNumrepeats = 0;
+        int nextAlarmTolerance = 0;
+        int nextAlarmTimeout = 0;
+
+        // popup windows
+        NewAlarmWindow newAlarmWindow;
+        NewAlarmWindow newAlarmWindowModify;
+        NewAction newAction;
+        HelpWindow hw;
 
         public void refreshAlarms() {
             alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
@@ -69,6 +78,9 @@ namespace danceoclock {
             nextAlarmChronologicalPriority = mostRecent.getChronologicalPriority();
             nextAlarmMusicPath = mostRecent.musicPath;
             nextAlarmActionPath = mostRecent.actionPath;
+            nextAlarmNumrepeats = mostRecent.numrepeats;
+            nextAlarmTolerance = mostRecent.tolerance;
+            nextAlarmTimeout = mostRecent.timeout;
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
@@ -86,7 +98,7 @@ namespace danceoclock {
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
             Application.Current.Dispatcher.Invoke((Action)delegate {
-                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, 30, 60, 2);
+                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, nextAlarmTolerance, nextAlarmTimeout, nextAlarmNumrepeats);
                 kw.Show();
             });
             disableAlarm(0);
@@ -94,8 +106,8 @@ namespace danceoclock {
             forceNextAlarm();
         }
 
-        public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action) {
-            alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action));
+        public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action, int numrepeats, int tolerance, int timeout) {
+            alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action, numrepeats, tolerance, timeout));
             refreshAlarms();
             checkNextAlarm();
         }
@@ -130,8 +142,17 @@ namespace danceoclock {
         }
 
         private void newAlarmButton_Click(object sender, RoutedEventArgs e) {
-            Window newAlarmWindow = new NewAlarmWindow(this, null);
-            newAlarmWindow.Show();
+
+           if (newAlarmWindow == null || !newAlarmWindow.isOpen)
+            {
+                newAlarmWindow = new NewAlarmWindow(this, null);
+                newAlarmWindow.Show();
+                newAlarmWindow.isOpen = true;
+            }
+            else
+            {
+                newAlarmWindow.Activate();
+            }
         }
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
@@ -145,10 +166,21 @@ namespace danceoclock {
         }
 
         private void modifyAlarmButton_Click(object sender, RoutedEventArgs e) {
-            Window newAlarmWindow = new NewAlarmWindow(this, alarmList[alarmListBox.SelectedIndex]);
-            newAlarmWindow.Title = "Modify Alarm";
-            alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
-            newAlarmWindow.Show();
+
+            if (alarmListBox.SelectedIndex == -1) return;
+
+            if (newAlarmWindowModify == null || !newAlarmWindowModify.isOpen)
+            {
+                newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmListBox.SelectedIndex]);
+                newAlarmWindowModify.Title = "Modify Alarm";
+                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                newAlarmWindowModify.Show();
+                newAlarmWindowModify.isOpen = true;
+            }
+            else
+            {
+                newAlarmWindowModify.Activate();
+            }
         }
 
         public bool snooze() {
@@ -164,8 +196,15 @@ namespace danceoclock {
 
         private void recordActionButton_Click(object sender, RoutedEventArgs e)
         {
-            NewAction newAction = new NewAction(this);
-            newAction.Show();
+            if (newAction == null || !newAction.isOpen)
+            {
+                newAction = new NewAction(this);
+                newAction.Show();
+            }
+            else
+            {
+                newAction.Activate();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -173,6 +212,19 @@ namespace danceoclock {
             //string gesturePath, double tolerance, double timeout, int numrepeats
             KinectWindow kw = new KinectWindow(this, "C:\\Users\\shanali\\Desktop\\james.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 20, 60, 2);
             kw.Show();
+        }
+
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (hw == null || !hw.isOpen)
+            {
+                hw = new HelpWindow();
+                hw.Show();
+            }
+            else
+            {
+                hw.Activate();
+            }
         }
     }
 }

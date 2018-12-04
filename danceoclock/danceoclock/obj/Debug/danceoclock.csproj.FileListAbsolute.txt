@@ -58,3 +58,5 @@ C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\NewAction
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\NewAction.baml
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\Interop.WMPLib.dll
 C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\danceoclock.csproj.ResolveComReference.cache
+C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.g.cs
+C:\Users\shanali\Desktop\danceoclock\danceoclock\danceoclock\obj\Debug\HelpWindow.baml

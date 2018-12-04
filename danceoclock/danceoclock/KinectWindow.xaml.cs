@@ -37,14 +37,14 @@ namespace danceoclock
         // PUT IN UI MAIN, but keep a copy here (load from UI main via constructor)
         public Dictionary<string, Gesture> Gestures; // save/load these in txt file
 
-        // counter for frames
+        // counter for frames for recording
         public int CurrentNumFrames = 0;
 
         // Number of seconds to take new frame
-        public double Freq = 0;
+        public double sampleRate = 0;
 
         // How long gesture should be
-        public int Length = 0;
+        public double Length = 0;
 
         // Frames left to record in the gesture
         public int FramesLeft = 0;
@@ -53,7 +53,14 @@ namespace danceoclock
         public bool Recording = true;
 
         public Gesture currentGesture = null;
+
+        // frame of current gesture being matched
         public int currentFrameInd = 0;
+
+        // number of frames on current frame -> timeout
+        public int framesPassed = 0;
+
+        // repetitions -> numrepeats
         public int Iterations = 0;
 
         // list of joints for highlighting incorrect joints
@@ -65,14 +72,14 @@ namespace danceoclock
 
 
         // constructor for recording mode
-        public KinectWindow(MainWindow parent, string path, double sec, int length)
+        public KinectWindow(MainWindow parent, string path, double sampleRate, double length)
         {
             this.parent = parent;
             this.path = path;
             InitializeComponent();
-            Freq = sec;
+            this.sampleRate = sampleRate;
             Length = length;
-            FramesLeft = (int) Math.Ceiling(Length / Freq);
+            FramesLeft = (int)Math.Ceiling(Length / this.sampleRate);
         }
 
 
@@ -89,6 +96,10 @@ namespace danceoclock
             Tolerance = tolerance;
             Timeout = timeout;
             Numrepeats = numrepeats;
+
+            Console.WriteLine("tolerance = " + Tolerance);
+            Console.WriteLine("timeout = " + Timeout);
+            Console.WriteLine("numrepeats = " + Numrepeats);
 
             // Music
             Player = new WindowsMediaPlayer();
@@ -208,9 +219,8 @@ namespace danceoclock
                                 // recording mode
                                 if (Recording)
                                 {
-                                    
                                     // how many frames has passed, compare to frequency*fps, we want to record once every freq*fps
-                                    if (++CurrentNumFrames == (int) Math.Ceiling(Freq * 30))
+                                    if (++CurrentNumFrames == (int) Math.Ceiling(sampleRate * 30))
                                     {
                                         // record take one frame, so decrement number of frames left to record
                                         if ((--FramesLeft) >= 0)
@@ -276,6 +286,9 @@ namespace danceoclock
                                     // match the current keyframe
                                     KeyFrame currentFrame = currentGesture.Keyframes[currentFrameInd];
 
+                                    // increment frames passed
+                                    framesPassed++;
+
                                     // show reference skeleton
                                     canvas.DrawRefSkeleton(currentFrame.Coords, Colors.Purple);
 
@@ -300,10 +313,12 @@ namespace danceoclock
                                         }
                                     }
 
-                                    if (AllMatch)
+                                    // if all angles have been matched or if timeout has been reached
+                                    if (AllMatch || framesPassed == Timeout)
                                     {
                                         // if all angles match
                                         Iterations = 0;
+                                        framesPassed = 0;
                                         currentFrameInd++;
                                     }
 

@@ -5,19 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:danceoclock"
         mc:Ignorable="d"
-        Title="Dance 'O Clock" Height="450" Width="800">
+        Title="Dance 'O Clock" Height="450" Width="800" MinHeight="450" MinWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="199*"/>
             <RowDefinition Height="220*"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="alarmListBox" Margin="18,62,229.556,76.667" Grid.RowSpan="2" FontSize="20"/>
+        <ListBox x:Name="alarmListBox" Margin="18,62,21.556,76.667" Grid.RowSpan="2" FontSize="20" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock
+                    Text="{Binding}"
+                    TextWrapping="Wrap"
+                    />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Label x:Name="label" Content="Alarms&#xD;&#xA;" HorizontalAlignment="Left" Margin="17,10,0,0" VerticalAlignment="Top" Width="120" Height="47" FontSize="24"/>
         <Button x:Name="newAlarmButton" Content="New Alarm" HorizontalAlignment="Left" Height="49" Margin="158,0,0,9.667" VerticalAlignment="Bottom" Width="125" Grid.Row="1" Click="newAlarmButton_Click" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Create a new alarm with your own music and movement settings."/>
         <Button x:Name="deleteAlarmButton" Content="Delete Alarm" HorizontalAlignment="Left" Height="49" Margin="299,0,0,9.667" VerticalAlignment="Bottom" Width="126" Grid.Row="1" Click="deleteAlarmButton_Click" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Delete the selected alarm."/>
         <Button x:Name="modifyAlarmButton" Content="Modify Alarm" HorizontalAlignment="Left" Height="49" Margin="441,0,0,9.667" VerticalAlignment="Bottom" Width="125" Grid.Row="1" Click="modifyAlarmButton_Click" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Modify the settings of the selected alarm."/>
         <Button x:Name="recordActionButton" Content="Record Action" HorizontalAlignment="Left" Margin="18,0,0,9.667" Grid.Row="1" VerticalAlignment="Bottom" Width="125" Height="49" Click="recordActionButton_Click" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Record a movement routine for waking up, with the specified sample rate and recording length settings."/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="657,100.111,0,0" VerticalAlignment="Top" Width="62" Click="Button_Click" Height="112" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
+        <Button Content="Button" HorizontalAlignment="Left" Margin="807,167.111,-29.444,-54.333" VerticalAlignment="Top" Width="18" Click="Button_Click" Height="109" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="-1"/>
@@ -27,5 +36,6 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
+        <Button x:Name="HelpButton" Content="Help" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="582,0,0,9.667" Grid.Row="1" Height="49" Click="HelpButton_Click" FontSize="16"/>
     </Grid>
 </Window>

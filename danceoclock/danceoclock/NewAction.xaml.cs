@@ -21,11 +21,14 @@ namespace danceoclock
     public partial class NewAction : Window
     {
         MainWindow parent = null;
+        public bool isOpen;
 
         public NewAction(MainWindow parent)
         {
             InitializeComponent();
             this.parent = parent;
+            isOpen = true;
+            this.Closed += new EventHandler(NewAlarmWindow_Closed);
         }
 
         private void browsePathButton_Click(object sender, RoutedEventArgs e)
@@ -40,13 +43,31 @@ namespace danceoclock
 
         private void recordButton_Click(object sender, RoutedEventArgs e)
         {
-            KinectWindow kinectWindow = new KinectWindow(parent, dirTextBox.Text + "\\" + fileNameTextBox.Text + ".txt", 0.5, 3);
-            /*CurrentNumFrames = 0;
-            Sec = 1;
-            Length = 2;
-            */
-            kinectWindow.Show();
-            Close();
+            double recordLength = 0;
+            double sampleRate = 0;
+
+            Double.TryParse(lengthBox.Text, out recordLength);
+            Double.TryParse(rateBox.Text, out sampleRate);
+
+            if (recordLength <= 0 || sampleRate <= 0 || sampleRate > recordLength)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Please make sure that your input is valid: Recording Length and Sample Rate should be positive decimal numbers, and Sample Rate should be less than Recording Length.",
+                                      "Input Error",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Error);
+            }
+
+            else
+            {
+                KinectWindow kinectWindow = new KinectWindow(parent, dirTextBox.Text + "\\" + fileNameTextBox.Text + ".txt", sampleRate, recordLength);
+                kinectWindow.Show();
+                Close();
+            }
+        }
+
+        void NewAlarmWindow_Closed(object sender, EventArgs e)
+        {
+            isOpen = false;
         }
     }
 }
