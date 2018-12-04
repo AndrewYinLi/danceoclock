@@ -56,7 +56,6 @@ namespace danceoclock
                                       MessageBoxButton.OK,
                                       MessageBoxImage.Error);
             }
-
             else
             {
                 KinectWindow kinectWindow = new KinectWindow(parent, dirTextBox.Text + "\\" + fileNameTextBox.Text + ".txt", sampleRate, recordLength);

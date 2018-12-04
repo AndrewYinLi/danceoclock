@@ -39,17 +39,25 @@ namespace danceoclock {
         NewAction newAction;
         HelpWindow hw;
 
+        Dictionary<string, int> alarmListIndices = new Dictionary<string, int>();
+
         public void refreshAlarms() {
             alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
             Dispatcher.Invoke(() =>
             {
                 alarmListBox.Items.Clear();
-                foreach (Alarm alarm in inactiveList) {
-                    alarmListBox.Items.Add("[Inactive] " + alarm.getFiller());
+                alarmListIndices.Clear();
+                for(int i = 0; i < inactiveList.Count; i++) {
+                    string filler = "[Inactive] " + inactiveList[i].getFiller();
+                    alarmListBox.Items.Add(filler);
+                    alarmListIndices.Add(filler, i);
+
                 }
-                foreach (Alarm alarm in alarmList)
-                {
-                    alarmListBox.Items.Add("[Active] " + alarm.getFiller());
+                for (int i = 0; i < alarmList.Count; i++) {
+                    string filler = "[Active] " + alarmList[i].getFiller();
+                    alarmListBox.Items.Add(filler);
+                    alarmListIndices.Add(filler, i);
+
                 }
             });
             
@@ -61,6 +69,13 @@ namespace danceoclock {
             if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) nextAlarm.Stop();
             alarmList.RemoveAt(alarmListIndex);
             refreshAlarms();
+        }
+
+        public void enableAlarm(int alarmListIndex) {
+            alarmList.Add(inactiveList[alarmListIndex]);
+            inactiveList.RemoveAt(alarmListIndex);
+            refreshAlarms();
+            forceNextAlarm();
         }
 
         public void checkNextAlarm() {
@@ -94,8 +109,8 @@ namespace danceoclock {
             DateTime targetDate = new DateTime(year, month, day);
             DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
             //DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
-            Console.WriteLine(targetTime.ToString());
-            Console.WriteLine(currentTime.ToString());
+            //Console.WriteLine(targetTime.ToString());
+            //Console.WriteLine(currentTime.ToString());
             double tickTime = (targetTime - currentTime).TotalMilliseconds;
             nextAlarm = new Timer(tickTime);
             nextAlarm.Elapsed += nextAlarmElapsed;
@@ -110,8 +125,9 @@ namespace danceoclock {
                 kw.Show();
             });
             disableAlarm(0);
-            forceNextAlarm();
             refreshAlarms();
+            forceNextAlarm();
+            
         }
 
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action, int numrepeats, int tolerance, int timeout) {
@@ -164,13 +180,12 @@ namespace danceoclock {
         }
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
-            if (alarmListBox.SelectedIndex != -1)
-            {
-                if (nextAlarmChronologicalPriority == alarmList[alarmListBox.SelectedIndex].getChronologicalPriority()) nextAlarm.Stop();
-                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
-                refreshAlarms();
-                checkNextAlarm();
-            }
+            if (alarmListBox.SelectedIndex == -1) return;
+            
+            if (nextAlarmChronologicalPriority == alarmList[alarmListBox.SelectedIndex].getChronologicalPriority()) nextAlarm.Stop();
+            alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+            refreshAlarms();
+            checkNextAlarm();
             
         }
 
@@ -234,6 +249,20 @@ namespace danceoclock {
             {
                 hw.Activate();
             }
+        }
+
+        private void ToggleAlarmButton_Click(object sender, RoutedEventArgs e) {
+            if (alarmListBox.SelectedIndex == -1) return;
+            string filler = alarmListBox.SelectedItem.ToString();
+            if (filler.Substring(1, 1).Equals("A")){
+                disableAlarm(alarmListIndices[filler]);
+                
+            }
+            else {
+                enableAlarm(alarmListIndices[filler]);
+            }
+            
+
         }
     }
 }

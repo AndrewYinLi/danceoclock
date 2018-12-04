@@ -53,6 +53,10 @@ namespace danceoclock {
             {
                 this.armyHour = 11 + hour;
             }
+           /* DateTime currentTime = DateTime.Now;
+            if(month == currentTime.Month && day == currentTime.Day && year == currentTime.Year && ) {
+              
+            }*/
         }
 
         public string placeholderZero(int chron) {

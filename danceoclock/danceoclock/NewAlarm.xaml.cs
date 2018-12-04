@@ -65,6 +65,13 @@ namespace danceoclock {
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
             try
             {
+                // validate numbers
+                int numrepeats, tolerance, timeout = 0;
+
+                Int32.TryParse(RepBox.Text, out numrepeats);
+                Int32.TryParse(ToleranceBox.Text, out tolerance);
+                Int32.TryParse(MaxtimeBox.Text, out timeout);
+
                 // validate audio file
                 if (!string.Equals(musicPathTextBox.Text.Substring(Math.Max(0, musicPathTextBox.Text.Length - 4)), ".mp3"))
                 {
@@ -83,14 +90,7 @@ namespace danceoclock {
                                                               MessageBoxImage.Error);
                 }
 
-                // validate numbers
-                int numrepeats, tolerance, timeout = 0;
-
-                Int32.TryParse(RepBox.Text, out numrepeats);
-                Int32.TryParse(ToleranceBox.Text, out tolerance);
-                Int32.TryParse(MaxtimeBox.Text, out timeout);
-
-                if (numrepeats <= 0)
+                else if (numrepeats <= 0)
                 {
                     MessageBoxResult result = MessageBox.Show("Repetitions must be a positive integer.",
                                           "Input Error",
@@ -123,7 +123,8 @@ namespace danceoclock {
                     Close();
                 }
 
-            } catch (System.FormatException) // TODO fix time formatting settings
+            }
+            catch (System.FormatException) // TODO fix time formatting settings
             {
                 MessageBoxResult result = MessageBox.Show("Please set a valid time.",
                                           "Input Error",
