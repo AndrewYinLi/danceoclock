@@ -51,7 +51,10 @@ namespace danceoclock {
             }
             else
             {
-                this.armyHour = 11 + hour;
+                if (hour != 12)
+                {
+                    this.armyHour = 12 + hour;
+                }
             }
            /* DateTime currentTime = DateTime.Now;
             if(month == currentTime.Month && day == currentTime.Day && year == currentTime.Year && ) {

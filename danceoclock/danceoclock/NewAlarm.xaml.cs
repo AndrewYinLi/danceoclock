@@ -40,6 +40,9 @@ namespace danceoclock {
                     pmButton.IsChecked = true;
                 }
                 actionTextBox.Text = oldAlarm.actionPath;
+                RepBox.Text = oldAlarm.numrepeats.ToString();
+                ToleranceBox.Text = oldAlarm.tolerance.ToString();
+                MaxtimeBox.Text = (oldAlarm.timeout/30).ToString();
             }
 
             this.Closed += new EventHandler(NewAlarmWindow_Closed);
@@ -114,6 +117,14 @@ namespace danceoclock {
                                           MessageBoxImage.Error);
                 }
 
+                else if (!parent.testAlarmTime(alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text),
+                        (amButton.IsChecked == true) ? true : false))
+                {
+                    MessageBoxResult result = MessageBox.Show("Please set a valid time.",
+                                          "Input Error",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                }
                 else
                 {
                     parent.createNewAlarm(musicPathTextBox.Text, alarmDatePicker.DisplayDate.ToString().Split(' ')[0], Int32.Parse(hoursTextBox.Text), Int32.Parse(minutesTextBox.Text), 
@@ -124,7 +135,7 @@ namespace danceoclock {
                 }
 
             }
-            catch (System.FormatException) // TODO fix time formatting settings
+            catch (System.Exception) // TODO fix time formatting settings
             {
                 MessageBoxResult result = MessageBox.Show("Please set a valid time.",
                                           "Input Error",

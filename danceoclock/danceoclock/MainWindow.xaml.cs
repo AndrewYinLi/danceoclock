@@ -109,12 +109,44 @@ namespace danceoclock {
             DateTime targetDate = new DateTime(year, month, day);
             DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
             //DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
-            //Console.WriteLine(targetTime.ToString());
-            //Console.WriteLine(currentTime.ToString());
+            Console.WriteLine(targetTime.ToString());
+            Console.WriteLine(currentTime.ToString());
             double tickTime = (targetTime - currentTime).TotalMilliseconds;
+            Console.WriteLine(targetTime - currentTime);
             nextAlarm = new Timer(tickTime);
             nextAlarm.Elapsed += nextAlarmElapsed;
             nextAlarm.Start();
+        }
+
+        public bool testAlarmTime(string date, int h, int m, bool isAM)
+        {
+            string[] dateSplit = date.Split('/');
+            int hour = h;
+            int month = Int32.Parse(dateSplit[0]);
+            int day = Int32.Parse(dateSplit[1]);
+            int year = Int32.Parse(dateSplit[2]);
+            DateTime currentTime = DateTime.Now;
+            Console.WriteLine(isAM);
+            if (isAM)
+            {
+                if (hour == 12)
+                {
+                    hour = 0;
+                }
+            }
+            else
+            {
+                if (hour != 12)
+                {
+                    hour = 12 + hour;
+                }
+            }
+            DateTime targetDate = new DateTime(year, month, day);
+            DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, m, 0);
+            double tickTime = (targetTime - currentTime).TotalMilliseconds;
+            Console.WriteLine(targetTime.ToString());
+            Console.WriteLine(currentTime.ToString());
+            return (tickTime > 0);
         }
 
         
