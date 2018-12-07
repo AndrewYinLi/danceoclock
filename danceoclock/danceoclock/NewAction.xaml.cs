@@ -55,6 +55,21 @@ namespace danceoclock
                                       "Input Error",
                                       MessageBoxButton.OK,
                                       MessageBoxImage.Error);
+
+            }
+            else if (System.IO.Path.GetFileName(fileNameTextBox.Text) == null)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Invalid file name",
+                                      "Input Error",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Error);
+            }
+            else if (System.IO.Path.GetFileName(dirTextBox.Text) == null)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Invalid save directory",
+                                      "Input Error",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Error);
             }
             else
             {

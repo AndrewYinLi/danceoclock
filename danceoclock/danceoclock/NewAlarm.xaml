@@ -18,7 +18,7 @@
         <TextBox x:Name="hoursTextBox" HorizontalAlignment="Left" Height="20" Margin="50,116,0,0" TextWrapping="Wrap" Text="h" VerticalAlignment="Top" Width="27" MouseEnter="hoursTextBox_MouseEnter"/>
         <TextBox x:Name="minutesTextBox" HorizontalAlignment="Left" Height="20" Margin="88,116,0,0" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" Width="27" MouseEnter="minutesTextBox_MousEnter"/>
         <Label x:Name="label2" Content=":" HorizontalAlignment="Left" Margin="75,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
-        <TextBox x:Name="actionTextBox" HorizontalAlignment="Left" Height="22" Margin="59,48,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="203" AutomationProperties.Name="b"/>
+        <TextBox x:Name="actionTextBox" HorizontalAlignment="Left" Height="22" Margin="59,48,0,0" Text="None" VerticalAlignment="Top" Width="203" AutomationProperties.Name="b"/>
         <Label x:Name="label_Copy" Content="Action:" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top"/>
         <Button x:Name="browseActionTextBox" Content="Browse..." HorizontalAlignment="Left" Margin="272,48,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="browseActionTextBox_Click"/>
         <Label x:Name="label_Copy2" Content="Repetitions:" HorizontalAlignment="Left" Margin="232,112,0,0" VerticalAlignment="Top" ToolTip="Number of times that the movement routine is repeated." Grid.RowSpan="2"/>

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace danceoclock {
     /// <summary>
@@ -66,6 +67,7 @@ namespace danceoclock {
         }
 
         private void createAlarmButton_Click(object sender, RoutedEventArgs e) {
+
             try
             {
                 // validate numbers
@@ -76,7 +78,8 @@ namespace danceoclock {
                 Int32.TryParse(MaxtimeBox.Text, out timeout);
 
                 // validate audio file
-                if (!string.Equals(musicPathTextBox.Text.Substring(Math.Max(0, musicPathTextBox.Text.Length - 4)), ".mp3"))
+                if (!string.Equals(musicPathTextBox.Text.Substring(Math.Max(0, musicPathTextBox.Text.Length - 4)), ".mp3") ||
+                    System.IO.Path.GetFileName(musicPathTextBox.Text) == null)
                 {
                     MessageBoxResult result = MessageBox.Show("Invalid music file.",
                                                               "File Error",
@@ -85,7 +88,8 @@ namespace danceoclock {
                 }
 
                 // validate action file
-                else if (!string.Equals(actionTextBox.Text.Substring(Math.Max(0, actionTextBox.Text.Length - 4)), ".txt"))
+                else if (!string.Equals(actionTextBox.Text.Substring(Math.Max(0, actionTextBox.Text.Length - 4)), ".txt") ||
+                    System.IO.Path.GetFileName(actionTextBox.Text) == null)
                 {
                     MessageBoxResult result = MessageBox.Show("Invalid action file.",
                                                               "File Error",
