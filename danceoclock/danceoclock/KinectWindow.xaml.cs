@@ -74,6 +74,9 @@ namespace danceoclock
         // constructor for recording mode
         public KinectWindow(MainWindow parent, string path, double sampleRate, double length)
         {
+            // Window style
+            WindowState = WindowState.Maximized;
+            WindowStyle = WindowStyle.SingleBorderWindow;
             this.parent = parent;
             this.path = path;
             InitializeComponent();
@@ -97,9 +100,11 @@ namespace danceoclock
             Timeout = timeout;
             Numrepeats = numrepeats;
 
+            /*
             Console.WriteLine("tolerance = " + Tolerance);
             Console.WriteLine("timeout = " + Timeout);
             Console.WriteLine("numrepeats = " + Numrepeats);
+            */
 
             // Music
             Player = new WindowsMediaPlayer();

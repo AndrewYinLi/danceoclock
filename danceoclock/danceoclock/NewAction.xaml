@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="New Action" Height="226.889" Width="460.888">
     <Grid>
-        <TextBox x:Name="fileNameTextBox" HorizontalAlignment="Left" Height="23" Margin="82,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275" TextChanged="fileNameTextBox_TextChanged"/>
+        <TextBox x:Name="fileNameTextBox" HorizontalAlignment="Left" Height="23" Margin="82,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
         <TextBox x:Name="dirTextBox" HorizontalAlignment="Left" Height="23" Margin="82,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="275"/>
         <Label Content="File Name:" HorizontalAlignment="Left" Margin="14,59,0,0" VerticalAlignment="Top"/>
         <Label Content="Save to:" HorizontalAlignment="Left" Margin="14,97,0,0" VerticalAlignment="Top"/>

@@ -227,9 +227,18 @@ namespace danceoclock {
 
             if (newAlarmWindowModify == null || !newAlarmWindowModify.isOpen)
             {
-                newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmListBox.SelectedIndex]);
-                newAlarmWindowModify.Title = "Modify Alarm";
-                alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                string filler = alarmListBox.SelectedItem.ToString();
+                if (filler.Substring(1, 1).Equals("A")) {
+                    newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmListIndices[filler]]);
+                    alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                    newAlarmWindowModify.Title = "Modify Alarm";
+                }
+                else {
+                    newAlarmWindowModify = new NewAlarmWindow(this, inactiveList[alarmListIndices[filler]]);
+                    inactiveList.Remove(inactiveList[alarmListIndices[filler]]);
+                    newAlarmWindowModify.Title = "Modify Alarm";
+                }
+                
                 newAlarmWindowModify.Show();
                 newAlarmWindowModify.isOpen = true;
             }
@@ -240,10 +249,10 @@ namespace danceoclock {
         }
 
         public bool snooze() {
-            if(alarmList[0].snoozes++ < 2) {
-                alarmList[0].minute += 5;
-                refreshAlarms();
-                checkNextAlarm();
+            if(inactiveList.Count > 0 && inactiveList[inactiveList.Count-1].snoozes++ < 2) {
+
+                inactiveList[inactiveList.Count - 1].minute += 5;
+                enableAlarm(inactiveList.Count - 1);
                 return true;
             }
             return false;
