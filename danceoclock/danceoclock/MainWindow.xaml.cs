@@ -32,7 +32,8 @@ namespace danceoclock {
         int nextAlarmNumrepeats = 0;
         int nextAlarmTolerance = 0;
         int nextAlarmTimeout = 0;
-
+        DateTime targetTime;
+        double minuteTicks = 30000.0;
         // popup windows
         NewAlarmWindow newAlarmWindow;
         NewAlarmWindow newAlarmWindowModify;
@@ -69,6 +70,7 @@ namespace danceoclock {
             if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) nextAlarm.Stop();
             alarmList.RemoveAt(alarmListIndex);
             refreshAlarms();
+            forceNextAlarm();
         }
 
         public void enableAlarm(int alarmListIndex) {
@@ -105,19 +107,19 @@ namespace danceoclock {
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
-            DateTime currentTime = DateTime.Now;
+            //DateTime currentTime = DateTime.Now;
             DateTime targetDate = new DateTime(year, month, day);
-            DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
-            //DateTime currentTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, 23, 48, 0);
-            Console.WriteLine(targetTime.ToString());
-            Console.WriteLine(currentTime.ToString());
-            double tickTime = (targetTime - currentTime).TotalMilliseconds;
-            Console.WriteLine(targetTime - currentTime);
-            nextAlarm = new Timer(tickTime);
+            targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
+            //double tickTime = (targetTime - currentTime).TotalMilliseconds;
+            alarmTick();
+        }
+
+        void alarmTick() {
+            nextAlarm = new Timer(minuteTicks);
             nextAlarm.Elapsed += nextAlarmElapsed;
             nextAlarm.Start();
         }
-
+        
         public bool testAlarmTime(string date, int h, int m, bool isAM)
         {
             string[] dateSplit = date.Split('/');
@@ -125,8 +127,8 @@ namespace danceoclock {
             int month = Int32.Parse(dateSplit[0]);
             int day = Int32.Parse(dateSplit[1]);
             int year = Int32.Parse(dateSplit[2]);
-            DateTime currentTime = DateTime.Now;
-            Console.WriteLine(isAM);
+           
+            //Console.WriteLine(isAM);
             if (isAM)
             {
                 if (hour == 12)
@@ -143,22 +145,27 @@ namespace danceoclock {
             }
             DateTime targetDate = new DateTime(year, month, day);
             DateTime targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, m, 0);
-            double tickTime = (targetTime - currentTime).TotalMilliseconds;
-            Console.WriteLine(targetTime.ToString());
-            Console.WriteLine(currentTime.ToString());
-            return (tickTime > 0);
+            DateTime currentTime = DateTime.Now;
+            return targetTime > currentTime;
         }
-
+        
         
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, nextAlarmTolerance, nextAlarmTimeout, nextAlarmNumrepeats);
-                kw.Show();
-            });
-            disableAlarm(0);
-            refreshAlarms();
-            forceNextAlarm();
+            DateTime currentTime = DateTime.Now;
+            //Console.WriteLine(currentTime.ToString() + " | " + targetTime.ToString());
+            if (currentTime.Date.ToString().Equals(targetTime.Date.ToString()) && currentTime.Hour == targetTime.Hour && currentTime.Minute == targetTime.Minute) {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, nextAlarmTolerance, nextAlarmTimeout, nextAlarmNumrepeats);
+                    kw.Show();
+                });
+                disableAlarm(0);
+                refreshAlarms();
+                forceNextAlarm();
+            }
+            else {
+                alarmTick();
+            }
             
         }
 
