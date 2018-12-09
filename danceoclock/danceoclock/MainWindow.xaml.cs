@@ -86,11 +86,6 @@ namespace danceoclock {
                 if (nextAlarm != null) nextAlarm.Stop();
                 return;
             }
-            Alarm mostRecent = alarmList[0];
-            if (nextAlarmChronologicalPriority == -1 || mostRecent.getChronologicalPriority() < nextAlarmChronologicalPriority)
-            {
-                forceNextAlarm();
-            }
         }
 
         void forceNextAlarm()
@@ -153,7 +148,7 @@ namespace danceoclock {
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
             DateTime currentTime = DateTime.Now;
-            //Console.WriteLine(currentTime.ToString() + " | " + targetTime.ToString());
+            Console.WriteLine(currentTime + " | " + targetTime);
             if (currentTime.Date.ToString().Equals(targetTime.Date.ToString()) && currentTime.Hour == targetTime.Hour && currentTime.Minute == targetTime.Minute) {
                 Application.Current.Dispatcher.Invoke((Action)delegate {
                     KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, nextAlarmTolerance, nextAlarmTimeout, nextAlarmNumrepeats);
@@ -173,6 +168,7 @@ namespace danceoclock {
             alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action, numrepeats, tolerance, timeout));
             refreshAlarms();
             checkNextAlarm();
+            forceNextAlarm();
         }
 
         public void writeGesture(Gesture gesture, string path)
@@ -225,7 +221,7 @@ namespace danceoclock {
             alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
             refreshAlarms();
             checkNextAlarm();
-            
+            forceNextAlarm();
         }
 
         private void modifyAlarmButton_Click(object sender, RoutedEventArgs e) {
@@ -237,7 +233,7 @@ namespace danceoclock {
                 string filler = alarmListBox.SelectedItem.ToString();
                 if (filler.Substring(1, 1).Equals("A")) {
                     newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmListIndices[filler]]);
-                    alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+                    alarmList.Remove(alarmList[alarmListIndices[filler]]);
                     newAlarmWindowModify.Title = "Modify Alarm";
                 }
                 else {
