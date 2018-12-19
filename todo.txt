@@ -1,8 +1,0 @@
-spotify
-when creating alarm, set numrepeats, tolerance, etc.
-ALARMS AFTER THE FIRST ONE DONT GO OFF	
-ui anchoring
-recurring alarms
-armytime with datetime (12pm)
-check validity of audio files and action files
-keep alarms after exiting

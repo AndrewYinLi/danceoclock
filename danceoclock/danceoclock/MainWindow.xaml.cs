@@ -32,32 +32,33 @@ namespace danceoclock {
         int nextAlarmNumrepeats = 0;
         int nextAlarmTolerance = 0;
         int nextAlarmTimeout = 0;
-        DateTime targetTime;
+        static DateTime targetTime;
         double minuteTicks = 30000.0;
+        bool activeAlarmExists = false;
         // popup windows
         NewAlarmWindow newAlarmWindow;
         NewAlarmWindow newAlarmWindowModify;
         NewAction newAction;
         HelpWindow hw;
 
-        Dictionary<string, int> alarmListIndices = new Dictionary<string, int>();
+        Dictionary<string, int> alarmIndices = new Dictionary<string, int>();
 
         public void refreshAlarms() {
             alarmList.Sort((x, y) => x.getChronologicalPriority().CompareTo(y.getChronologicalPriority()));
             Dispatcher.Invoke(() =>
             {
                 alarmListBox.Items.Clear();
-                alarmListIndices.Clear();
+                alarmIndices.Clear();
                 for(int i = 0; i < inactiveList.Count; i++) {
                     string filler = "[Inactive] " + inactiveList[i].getFiller();
                     alarmListBox.Items.Add(filler);
-                    alarmListIndices.Add(filler, i);
+                    alarmIndices.Add(filler, i);
 
                 }
                 for (int i = 0; i < alarmList.Count; i++) {
                     string filler = "[Active] " + alarmList[i].getFiller();
                     alarmListBox.Items.Add(filler);
-                    alarmListIndices.Add(filler, i);
+                    alarmIndices.Add(filler, i);
 
                 }
             });
@@ -66,8 +67,17 @@ namespace danceoclock {
 
         public void disableAlarm(int alarmListIndex)
         {
+            Console.WriteLine("______________________________");
+            StringBuilder sb = new StringBuilder();
+            sb.Append("alarmList: ");
+            foreach (Alarm alarm in alarmList) sb.Append(alarm.getDebugStr() + " | ");
+            Console.WriteLine(sb.ToString());
+            Console.WriteLine("TARGET: " + targetTime);
+            activeAlarmExists = false;
             inactiveList.Add(alarmList[alarmListIndex]);
-            if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) nextAlarm.Stop();
+            if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) {
+                nextAlarm.Stop();
+            }
             alarmList.RemoveAt(alarmListIndex);
             refreshAlarms();
             forceNextAlarm();
@@ -80,32 +90,32 @@ namespace danceoclock {
             forceNextAlarm();
         }
 
-        public void checkNextAlarm() {
-            if (alarmList.Count == 0)
-            {
-                if (nextAlarm != null) nextAlarm.Stop();
-                return;
-            }
+        public void stopNextAlarm() {
+            if (nextAlarm != null) nextAlarm.Stop();
+
         }
 
         void forceNextAlarm()
         {
-            if (alarmList.Count == 0) return;
+            if (alarmList.Count == 0) {
+                Console.WriteLine("NO MORE");
+                return;
+            }
             Alarm mostRecent = alarmList[0];
-            setNextAlarm(mostRecent.year, mostRecent.month, mostRecent.day, mostRecent.armyHour, mostRecent.minute);
             nextAlarmChronologicalPriority = mostRecent.getChronologicalPriority();
             nextAlarmMusicPath = mostRecent.musicPath;
             nextAlarmActionPath = mostRecent.actionPath;
             nextAlarmNumrepeats = mostRecent.numrepeats;
             nextAlarmTolerance = mostRecent.tolerance;
             nextAlarmTimeout = mostRecent.timeout;
+            activeAlarmExists = true;
+            setNextAlarm(mostRecent.year, mostRecent.month, mostRecent.day, mostRecent.armyHour, mostRecent.minute);
         }
 
         void setNextAlarm(int year, int month, int day, int hour, int minute) {
             //DateTime currentTime = DateTime.Now;
             DateTime targetDate = new DateTime(year, month, day);
             targetTime = new DateTime(targetDate.Year, targetDate.Month, targetDate.Day, hour, minute, 0);
-            //double tickTime = (targetTime - currentTime).TotalMilliseconds;
             alarmTick();
         }
 
@@ -148,15 +158,14 @@ namespace danceoclock {
         void nextAlarmElapsed(object sender, ElapsedEventArgs e) {
             nextAlarm.Stop();
             DateTime currentTime = DateTime.Now;
-            Console.WriteLine(currentTime + " | " + targetTime);
-            if (currentTime.Date.ToString().Equals(targetTime.Date.ToString()) && currentTime.Hour == targetTime.Hour && currentTime.Minute == targetTime.Minute) {
+            if (activeAlarmExists && currentTime.Date.ToString().Equals(targetTime.Date.ToString()) && currentTime.Hour == targetTime.Hour && currentTime.Minute == targetTime.Minute) {
+                //Console.WriteLine(targetTime.Hour + ":" + targetTime.Minute);
                 Application.Current.Dispatcher.Invoke((Action)delegate {
                     KinectWindow kw = new KinectWindow(this, nextAlarmActionPath, nextAlarmMusicPath, nextAlarmTolerance, nextAlarmTimeout, nextAlarmNumrepeats);
                     kw.Show();
                 });
                 disableAlarm(0);
-                refreshAlarms();
-                forceNextAlarm();
+
             }
             else {
                 alarmTick();
@@ -167,7 +176,7 @@ namespace danceoclock {
         public void createNewAlarm(string musicPath, string date, int h, int m, bool isAM, string action, int numrepeats, int tolerance, int timeout) {
             alarmList.Add(new Alarm(musicPath, date, h , m, isAM, action, numrepeats, tolerance, timeout));
             refreshAlarms();
-            checkNextAlarm();
+            stopNextAlarm();
             forceNextAlarm();
         }
 
@@ -216,11 +225,17 @@ namespace danceoclock {
 
         private void deleteAlarmButton_Click(object sender, RoutedEventArgs e) {
             if (alarmListBox.SelectedIndex == -1) return;
-            
-            if (nextAlarmChronologicalPriority == alarmList[alarmListBox.SelectedIndex].getChronologicalPriority()) nextAlarm.Stop();
-            alarmList.Remove(alarmList[alarmListBox.SelectedIndex]);
+            string filler = alarmListBox.SelectedItem.ToString();
+            if (filler.Substring(1, 1).Equals("A")) {
+                if (nextAlarmChronologicalPriority == alarmList[alarmIndices[filler]].getChronologicalPriority()) nextAlarm.Stop();
+                alarmList.Remove(alarmList[alarmIndices[filler]]);
+            }
+            else {
+                if (nextAlarmChronologicalPriority == inactiveList[alarmIndices[filler]].getChronologicalPriority()) nextAlarm.Stop();
+                inactiveList.Remove(inactiveList[alarmIndices[filler]]);
+            }
             refreshAlarms();
-            checkNextAlarm();
+            stopNextAlarm();
             forceNextAlarm();
         }
 
@@ -232,13 +247,15 @@ namespace danceoclock {
             {
                 string filler = alarmListBox.SelectedItem.ToString();
                 if (filler.Substring(1, 1).Equals("A")) {
-                    newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmListIndices[filler]]);
-                    alarmList.Remove(alarmList[alarmListIndices[filler]]);
+                    newAlarmWindowModify = new NewAlarmWindow(this, alarmList[alarmIndices[filler]]);
+                    if (nextAlarmChronologicalPriority == alarmList[alarmIndices[filler]].getChronologicalPriority()) nextAlarm.Stop();
+                    alarmList.Remove(alarmList[alarmIndices[filler]]);
                     newAlarmWindowModify.Title = "Modify Alarm";
                 }
                 else {
-                    newAlarmWindowModify = new NewAlarmWindow(this, inactiveList[alarmListIndices[filler]]);
-                    inactiveList.Remove(inactiveList[alarmListIndices[filler]]);
+                    newAlarmWindowModify = new NewAlarmWindow(this, inactiveList[alarmIndices[filler]]);
+                    if (nextAlarmChronologicalPriority == inactiveList[alarmIndices[filler]].getChronologicalPriority()) nextAlarm.Stop();
+                    inactiveList.Remove(inactiveList[alarmIndices[filler]]);
                     newAlarmWindowModify.Title = "Modify Alarm";
                 }
                 
@@ -275,13 +292,6 @@ namespace danceoclock {
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //string gesturePath, double tolerance, double timeout, int numrepeats
-            KinectWindow kw = new KinectWindow(this, "C:\\Users\\shanali\\Desktop\\james.txt", "C:\\Users\\shanali\\Desktop\\Li_MysteryDungeon_Scene.mp3", 20, 60, 2);
-            kw.Show();
-        }
-
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
             if (hw == null || !hw.isOpen)
@@ -299,11 +309,10 @@ namespace danceoclock {
             if (alarmListBox.SelectedIndex == -1) return;
             string filler = alarmListBox.SelectedItem.ToString();
             if (filler.Substring(1, 1).Equals("A")){
-                disableAlarm(alarmListIndices[filler]);
-                
+                disableAlarm(alarmIndices[filler]);
             }
             else {
-                enableAlarm(alarmListIndices[filler]);
+                enableAlarm(alarmIndices[filler]);
             }
             
 

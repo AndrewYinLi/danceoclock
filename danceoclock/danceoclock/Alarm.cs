@@ -80,5 +80,9 @@ namespace danceoclock {
             //System.Diagnostics.Debug.Write(yearStr + monthStr + dayStr + hourStr + minuteStr);
             return Int32.Parse(yearStr + monthStr + dayStr + hourStr + minuteStr);
         }
+
+        public string getDebugStr() {
+            return hour + ":" + placeholderZero(minute) + minute + ((isAM) ? " AM" : " PM");
+        }
     }
 }
