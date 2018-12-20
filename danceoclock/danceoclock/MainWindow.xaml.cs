@@ -67,12 +67,14 @@ namespace danceoclock {
 
         public void disableAlarm(int alarmListIndex)
         {
+            /*
             Console.WriteLine("______________________________");
             StringBuilder sb = new StringBuilder();
             sb.Append("alarmList: ");
             foreach (Alarm alarm in alarmList) sb.Append(alarm.getDebugStr() + " | ");
             Console.WriteLine(sb.ToString());
             Console.WriteLine("TARGET: " + targetTime);
+            */
             activeAlarmExists = false;
             inactiveList.Add(alarmList[alarmListIndex]);
             if (nextAlarmChronologicalPriority == alarmList[alarmListIndex].getChronologicalPriority()) {
@@ -98,7 +100,7 @@ namespace danceoclock {
         void forceNextAlarm()
         {
             if (alarmList.Count == 0) {
-                Console.WriteLine("NO MORE");
+                //Console.WriteLine("NO MORE");
                 return;
             }
             Alarm mostRecent = alarmList[0];
