@@ -22,3 +22,5 @@ Using the Dance O'clock application, you can do the following, after connecting 
 - Smoother action recording and detection.
 - Improved file management.
 - Support for other operating systems.
+
+Feel free to contact us with your suggestions!
