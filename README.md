@@ -5,7 +5,7 @@ College students are perennially exhausted, and getting out of bed is often a pa
 
 Dance O'clock was designed and developed from the holistic perspective of human-computer interaction; the original design was built upon an initial questionnaire of 26 college students around the world, which gauged their needs and feelings towards a movement-deactivated alarm system, and throughout the development process, the design components and functionalities were constantly adjusted accoring to real-time feedback from potential users. 
 
-Dance O'clock was programmed by Andrew Li and Shana Li in C# using Visual Studio and the Microsoft Kinect SDK, along with the Microsoft Kinect 2.0 sensor. 
+Dance O'clock was programmed by Andrew Li and Shana Li in C# using Visual Studio and the Microsoft Kinect SDK, along with the Microsoft Kinect 2.0 sensor. This project would not be possible without [Vangos Pterneas' tutorials for developing applications with the Kinect SDK](https://pterneas.com/), or professor [Cynthia Taylor's](https://cs.oberlin.edu/~ctaylor/) unwavering support and guidance.
 
 ## How to Use Dance O'clock
 Using the Dance O'clock application, you can do the following, after connecting a Microsoft Kinect 2.0 sensor:
