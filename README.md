@@ -1,4 +1,4 @@
-# Dance O'clock: Movement-deactivated Alarm Clock Using The Microsoft Kinect :dancers::alarm_clock:
+### Dance O'clock: Movement-deactivated Alarm Clock Using The Microsoft Kinect :dancers::alarm_clock:
 
 **_The findings for the case study encompassing this project can be viewed as a PDF in this repository [here](danceoclock_paper.pdf)._**
 
