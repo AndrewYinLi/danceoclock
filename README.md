@@ -29,3 +29,6 @@ Build from source from the Visual Studio solution or execute the program directl
 3. Create and set up a new alarm with a selected recorded action, along with any valid .mp3 file to play as the alarm sound. The Dance O'clock package includes three preset alarm sounds.
 4. Modify any of the alarm’s attributes.
 5. Wait for the alarm to go off, and then perform the required actions to deactivate the alarm with the visual guidance of a colored skeleton, as well as a different skeleton displaying user movement and indicating incorrect joint angles.
+
+## Questions? Comments?
+Feel free to reach out to us at ali@oberlin.edu and sli2@oberlin.edu. Moreover, the findings for the case study encompassing this project can be viewed as a PDF in this repository [here](danceoclock_paper.pdf).
