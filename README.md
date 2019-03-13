@@ -27,8 +27,9 @@ Build from source from the Visual Studio solution or execute the program directl
 1. Open and read the help menu, which has helpful tips and instructions for using the program.
 2. Record an action using the Kinect camera, and specify the length of recording, frame sample rate (these are the frames that are saved and matched with the frames that are performed during alarm deactivation), and the file saving options. The saved files contain the angles between limbs at each important body joint, which is captured at the specified sample rate by the Kinect sensor. The Dance O'clock package includes five preset movements.
 3. Create and set up a new alarm with a selected recorded action, along with any valid .mp3 file to play as the alarm sound. The Dance O'clock package includes three preset alarm sounds.
-4. Modify any of the alarm’s attributes.
+![alt text](README_assets/ui1.png "Creating a new alarm")
+4. Modify any of the alarm’s settings.
 5. Wait for the alarm to go off, and then perform the required actions to deactivate the alarm with the visual guidance of a colored skeleton, as well as a different skeleton displaying user movement and indicating incorrect joint angles.
-
+![alt text](README_assets/demo.png "Deactivating the alarm")
 ## Questions? Comments?
 Feel free to reach out to us at ali@oberlin.edu and sli2@oberlin.edu. Moreover, the findings for the case study encompassing this project can be viewed as a PDF in this repository [here](danceoclock_paper.pdf).
